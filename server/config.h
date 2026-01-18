@@ -1,0 +1,15 @@
+#ifndef CONFIG_H
+#define CONFIG_H
+
+#define SERVER_ADDRESS ""
+#define SERVER_PORT 10000
+#define MAX_CLIENTS 10
+#define MAX_ROOM_LIMIT 2
+#define MAGIC "JOKE"
+
+#define DECK_C_COUNT 108
+#define PING_INTERVAL 15
+#define PONG_TIMEOUT 35
+#define MAX_DISCONNECT_COUNT 3
+
+#endif

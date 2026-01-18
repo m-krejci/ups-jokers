@@ -1,0 +1,1653 @@
+[2026-01-18 17:54:31] [INFO] [TID:137343464937280] main.c:16: Server startuje
+[2026-01-18 17:54:31] [INFO] [TID:137343464937280] client_manager.c:30: Klienti nainicializováni (MAX_CLIENTS=10)
+
+[2026-01-18 17:54:31] [INFO] [TID:137343464937280] room_manager.c:32: Místnosti nainicializovány
+
+[2026-01-18 17:54:31] [INFO] [TID:137343464937280] game_manager.c:23: Herní systém nainicializován
+
+[2026-01-18 17:54:31] [INFO] [TID:137343464933056] server_manager.c:20: Timeout checker vlákno spuštěno (interval 3s)
+
+[2026-01-18 17:54:39] [INFO] [TID:137343464937280] server_manager.c:132: Novy hrac pripojen (FD: 5, ID: 1)
+
+[2026-01-18 17:54:39] [INFO] [TID:137343456540352] client_manager.c:174: Vlákno spuštěno pro klienta (fd=5, index=0)
+
+[2026-01-18 17:54:39] [INFO] [TID:137343456540352] client_manager.c:206: Přijato: type='LOGI' len=4 body='tigo'
+
+[2026-01-18 17:54:39] [DEBUG] [TID:137343456540352] client_manager.c:345: Vytvářím nového hráče 'tigo' na slotu 0
+
+[2026-01-18 17:54:39] [INFO] [TID:137343456540352] protocol.c:172: Sending to client socket 5: JOKEOKAY0015Vítej ve hře!
+
+[2026-01-18 17:54:39] [INFO] [TID:137343456540352] client_manager.c:353: Nový klient 'tigo' přihlášen (fd=5, slot=0)
+
+[2026-01-18 17:54:40] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 5: JOKEPING0000
+
+[2026-01-18 17:54:40] [INFO] [TID:137343456540352] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:54:41] [INFO] [TID:137343464937280] server_manager.c:132: Novy hrac pripojen (FD: 6, ID: 2)
+
+[2026-01-18 17:54:41] [INFO] [TID:137343448147648] client_manager.c:174: Vlákno spuštěno pro klienta (fd=6, index=1)
+
+[2026-01-18 17:54:41] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='LOGI' len=5 body='tigoa'
+
+[2026-01-18 17:54:41] [DEBUG] [TID:137343448147648] client_manager.c:345: Vytvářím nového hráče 'tigoa' na slotu 1
+
+[2026-01-18 17:54:41] [INFO] [TID:137343448147648] protocol.c:172: Sending to client socket 6: JOKEOKAY0015Vítej ve hře!
+
+[2026-01-18 17:54:41] [INFO] [TID:137343448147648] client_manager.c:353: Nový klient 'tigoa' přihlášen (fd=6, slot=1)
+
+[2026-01-18 17:54:43] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 5: JOKEPING0000
+
+[2026-01-18 17:54:43] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 6: JOKEPING0000
+
+[2026-01-18 17:54:43] [INFO] [TID:137343456540352] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:54:43] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:54:43] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='RCRT' len=2 body='as'
+
+[2026-01-18 17:54:43] [INFO] [TID:137343448147648] room_manager.c:111: Vytvořena nová místnost: as (ID: 0)
+
+[2026-01-18 17:54:43] [INFO] [TID:137343448147648] room_manager.c:112: Vlastník (index 1) zapsán do slotu 0 místnosti 0
+
+[2026-01-18 17:54:43] [INFO] [TID:137343448147648] protocol.c:172: Sending to client socket 6: JOKEOCRT00010
+
+[2026-01-18 17:54:43] [INFO] [TID:137343448147648] protocol.c:172: Sending to client socket 6: JOKEBOSS00011
+
+[2026-01-18 17:54:45] [INFO] [TID:137343456540352] client_manager.c:206: Přijato: type='RLIS' len=0 body=''
+
+[2026-01-18 17:54:45] [INFO] [TID:137343456540352] protocol.c:172: Sending to client socket 5: JOKERLIS00140|as|(1/2)|W,
+
+
+[2026-01-18 17:54:46] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 5: JOKEPING0000
+
+[2026-01-18 17:54:46] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 6: JOKEPING0000
+
+[2026-01-18 17:54:46] [INFO] [TID:137343456540352] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:54:46] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:54:46] [INFO] [TID:137343456540352] client_manager.c:206: Přijato: type='RCNT' len=1 body='0'
+
+[2026-01-18 17:54:46] [INFO] [TID:137343456540352] room_manager.c:164: Klient 0 připojen k místnosti 0 (2/2)
+
+[2026-01-18 17:54:46] [INFO] [TID:137343456540352] protocol.c:172: Sending to client socket 5: JOKEOCNT00010
+
+[2026-01-18 17:54:46] [INFO] [TID:137343456540352] client_manager.c:206: Přijato: type='REDY' len=1 body='1'
+
+[2026-01-18 17:54:46] [INFO] [TID:137343456540352] room_manager.c:273: Ready: 1 | 0
+
+[2026-01-18 17:54:46] [INFO] [TID:137343456540352] room_manager.c:273: Ready: 0 | 0
+
+[2026-01-18 17:54:46] [INFO] [TID:137343456540352] room_manager.c:283: Stav: 0, Ready: 1
+
+[2026-01-18 17:54:46] [INFO] [TID:137343456540352] room_manager.c:284: Klient 0 v místnosti 0: READY (ready: 1/2)
+
+[2026-01-18 17:54:46] [INFO] [TID:137343456540352] protocol.c:172: Sending to client socket 6: JOKEPRDY0005(1/2)
+
+[2026-01-18 17:54:46] [INFO] [TID:137343456540352] protocol.c:172: Sending to client socket 5: JOKEPRDY0005(1/2)
+
+[2026-01-18 17:54:46] [INFO] [TID:137343456540352] protocol.c:172: Sending to client socket 6: JOKERINF0039tigoa|NOT READY|OWNER,tigo|READY|GUEST,
+
+[2026-01-18 17:54:46] [INFO] [TID:137343456540352] protocol.c:172: Sending to client socket 5: JOKERINF0039tigoa|NOT READY|OWNER,tigo|READY|GUEST,
+
+[2026-01-18 17:54:48] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='REDY' len=1 body='1'
+
+[2026-01-18 17:54:48] [INFO] [TID:137343448147648] room_manager.c:273: Ready: 1 | 1
+
+[2026-01-18 17:54:48] [INFO] [TID:137343448147648] room_manager.c:283: Stav: 0, Ready: 2
+
+[2026-01-18 17:54:48] [INFO] [TID:137343448147648] room_manager.c:284: Klient 1 v místnosti 0: READY (ready: 2/2)
+
+[2026-01-18 17:54:48] [INFO] [TID:137343448147648] protocol.c:172: Sending to client socket 6: JOKEPRDY0005(2/2)
+
+[2026-01-18 17:54:48] [INFO] [TID:137343448147648] protocol.c:172: Sending to client socket 5: JOKEPRDY0005(2/2)
+
+[2026-01-18 17:54:48] [INFO] [TID:137343448147648] protocol.c:172: Sending to client socket 6: JOKERINF0035tigoa|READY|OWNER,tigo|READY|GUEST,
+
+[2026-01-18 17:54:48] [INFO] [TID:137343448147648] protocol.c:172: Sending to client socket 5: JOKERINF0035tigoa|READY|OWNER,tigo|READY|GUEST,
+
+[2026-01-18 17:54:48] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='STRT' len=1 body='1'
+
+[2026-01-18 17:54:48] [INFO] [TID:137343448147648] game_manager.c:75: Hra vytvořena s 2 hráči
+
+[2026-01-18 17:54:48] [INFO] [TID:137343448147648] game_manager.c:112: Spouštím hru v místnosti 0
+
+[2026-01-18 17:54:48] [INFO] [TID:137343448147648] game_manager.c:1292: Balíček inicializován a zamíchán (108 karet)
+
+[2026-01-18 17:54:48] [INFO] [TID:137343448147648] game_manager.c:1311: Hráč 1 dostal 15 karet
+
+[2026-01-18 17:54:48] [INFO] [TID:137343448147648] game_manager.c:1311: Hráč 0 dostal 14 karet
+
+[2026-01-18 17:54:48] [INFO] [TID:137343448147648] game_manager.c:130: Hru zahajuje hráč: s ID 1
+
+[2026-01-18 17:54:48] [INFO] [TID:137343448147648] protocol.c:172: Sending to client socket 6: JOKESTRT0014Hra začíná!
+
+[2026-01-18 17:54:48] [INFO] [TID:137343448147648] protocol.c:172: Sending to client socket 5: JOKESTRT0014Hra začíná!
+
+[2026-01-18 17:54:48] [INFO] [TID:137343448147648] room_manager.c:273: Ready: 1 | 1
+
+[2026-01-18 17:54:48] [INFO] [TID:137343448147648] room_manager.c:283: Stav: 1, Ready: 1
+
+[2026-01-18 17:54:48] [INFO] [TID:137343448147648] room_manager.c:284: Klient 1 v místnosti 0: NOT READY (ready: 1/2)
+
+[2026-01-18 17:54:48] [INFO] [TID:137343448147648] room_manager.c:273: Ready: 1 | 0
+
+[2026-01-18 17:54:48] [INFO] [TID:137343448147648] room_manager.c:273: Ready: 0 | 0
+
+[2026-01-18 17:54:48] [INFO] [TID:137343448147648] room_manager.c:283: Stav: 1, Ready: 0
+
+[2026-01-18 17:54:48] [INFO] [TID:137343448147648] room_manager.c:284: Klient 0 v místnosti 0: NOT READY (ready: 0/2)
+
+[2026-01-18 17:54:48] [INFO] [TID:137343448147648] protocol.c:172: Sending to client socket 6: JOKETURN0011Jsi na tahu
+
+[2026-01-18 17:54:48] [INFO] [TID:137343448147648] protocol.c:172: Sending to client socket 6: JOKECRDS0044YY|YY|YY|YY|KS|QS|JS|XS|9S|8S|7S|6S|5S|4S|3S
+
+[2026-01-18 17:54:48] [INFO] [TID:137343448147648] protocol.c:172: Sending to client socket 5: JOKEWAIT0006Čekej
+
+[2026-01-18 17:54:48] [INFO] [TID:137343448147648] protocol.c:172: Sending to client socket 5: JOKECRDS00412S|AS|KC|QC|JC|XC|9C|8C|7C|6C|5C|4C|3C|2C
+
+[2026-01-18 17:54:49] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 5: JOKEPING0000
+
+[2026-01-18 17:54:49] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 6: JOKEPING0000
+
+[2026-01-18 17:54:49] [INFO] [TID:137343456540352] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:54:49] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:54:52] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 5: JOKEPING0000
+
+[2026-01-18 17:54:52] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 6: JOKEPING0000
+
+[2026-01-18 17:54:52] [INFO] [TID:137343456540352] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:54:55] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 5: JOKEPING0000
+
+[2026-01-18 17:54:55] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 6: JOKEPING0000
+
+[2026-01-18 17:54:55] [INFO] [TID:137343456540352] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:54:58] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 5: JOKEPING0000
+
+[2026-01-18 17:54:58] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 6: JOKEPING0000
+
+[2026-01-18 17:54:58] [INFO] [TID:137343456540352] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:55:01] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 5: JOKEPING0000
+
+[2026-01-18 17:55:01] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 6: JOKEPING0000
+
+[2026-01-18 17:55:01] [INFO] [TID:137343464933056] client_manager.c:89: Klient 'tigoa' timeout (heartbeat) - odpojuji 
+
+[2026-01-18 17:55:01] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 6: JOKELBBY0029Ztraceno spojení (heartbeat)
+
+[2026-01-18 17:55:01] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 6: JOKEPAUS0022Protihráč se odpojil
+
+[2026-01-18 17:55:01] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 5: JOKEPAUS0022Protihráč se odpojil
+
+[2026-01-18 17:55:01] [INFO] [TID:137343464933056] game_manager.c:1024: Pozastavuji hru v místnosti 0: Protihráč se odpojil
+
+[2026-01-18 17:55:01] [INFO] [TID:137343456540352] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:55:04] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 5: JOKEPING0000
+
+[2026-01-18 17:55:04] [INFO] [TID:137343456540352] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:55:05] [INFO] [TID:137343448147648] client_manager.c:187: Klient se odpojil (fd=6)
+
+[2026-01-18 17:55:05] [INFO] [TID:137343448147648] client_manager.c:1089: Klient tigoa se odpojuje (fd=6, slot=1)
+
+[2026-01-18 17:55:05] [INFO] [TID:137343448147648] protocol.c:172: Sending to client socket 5: JOKEPAUS0024Hráč tigoa se odpojil.
+
+[2026-01-18 17:55:05] [INFO] [TID:137343448147648] game_manager.c:1024: Pozastavuji hru v místnosti 0: Hra pozastavena - čeká se na reconnect
+
+[2026-01-18 17:55:05] [DEBUG] [TID:137343448147648] client_manager.c:1121:   -> Po odpojení: nick='tigoa', socket_fd=-1, is_connected=0, disconnect_time=1768755305, status=0
+
+[2026-01-18 17:55:07] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 5: JOKEPING0000
+
+[2026-01-18 17:55:07] [INFO] [TID:137343456540352] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:55:07] [INFO] [TID:137343464937280] server_manager.c:132: Novy hrac pripojen (FD: 7, ID: 2)
+
+[2026-01-18 17:55:07] [INFO] [TID:137343448147648] client_manager.c:174: Vlákno spuštěno pro klienta (fd=7, index=1)
+
+[2026-01-18 17:55:07] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='LOGI' len=5 body='tigoa'
+
+[2026-01-18 17:55:07] [INFO] [TID:137343448147648] protocol.c:172: Sending to client socket 7: JOKEOKAY0004TURN
+
+[2026-01-18 17:55:07] [INFO] [TID:137343448147648] client_manager.c:287: Hráč 'tigoa' se reconnectuje na STEJNÝ slot 1
+
+[2026-01-18 17:55:07] [INFO] [TID:137343448147648] protocol.c:172: Sending to client socket 7: JOKERECO0021Reconnect úspěšný
+
+[2026-01-18 17:55:07] [INFO] [TID:137343448147648] client_manager.c:300: Reconnect úspesny
+[2026-01-18 17:55:07] [INFO] [TID:137343448147648] game_manager.c:1039: Obnovuji hru v místnosti 0
+
+[2026-01-18 17:55:07] [INFO] [TID:137343448147648] protocol.c:172: Sending to client socket 7: JOKESTAT0042YYYYYYYYKSQSJSXS9S8S7S6S5S4S3S|AC||TURN|14
+
+[2026-01-18 17:55:07] [INFO] [TID:137343448147648] protocol.c:172: Sending to client socket 7: JOKERESU0038Hráč se vrátil do hry, obnovuji hru
+
+[2026-01-18 17:55:07] [INFO] [TID:137343448147648] protocol.c:172: Sending to client socket 5: JOKERESU0038Hráč se vrátil do hry, obnovuji hru
+
+[2026-01-18 17:55:10] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 5: JOKEPING0000
+
+[2026-01-18 17:55:10] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:55:10] [INFO] [TID:137343456540352] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:55:10] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:55:13] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 5: JOKEPING0000
+
+[2026-01-18 17:55:13] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:55:13] [INFO] [TID:137343456540352] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:55:13] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:55:16] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 5: JOKEPING0000
+
+[2026-01-18 17:55:16] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:55:16] [INFO] [TID:137343456540352] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:55:16] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:55:19] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 5: JOKEPING0000
+
+[2026-01-18 17:55:19] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:55:19] [INFO] [TID:137343456540352] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:55:19] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:55:22] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 5: JOKEPING0000
+
+[2026-01-18 17:55:22] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:55:22] [INFO] [TID:137343456540352] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:55:22] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:55:25] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 5: JOKEPING0000
+
+[2026-01-18 17:55:25] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:55:25] [INFO] [TID:137343456540352] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:55:25] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:55:25] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='UNLO' len=28 body='3S4S5S6S7S8S9SXSJSQSKSYYYYYY'
+
+[2026-01-18 17:55:25] [DEBUG] [TID:137343448147648] game_manager.c:381: Zahajuji kontrolu POSTUPKY
+
+[2026-01-18 17:55:25] [DEBUG] [TID:137343448147648] game_manager.c:401: Pokus 0 (0=Eso nizke, 1=Eso vysoke)
+
+[2026-01-18 17:55:25] [DEBUG] [TID:137343448147648] game_manager.c:456: Postupka potvrzena v pokusu 0!
+
+[2026-01-18 17:55:25] [INFO] [TID:137343448147648] game_manager.c:592: Kombinace: POSTUPKA (stejná barva)
+
+[2026-01-18 17:55:25] [INFO] [TID:137343448147648] game_manager.c:619: Hráč 1 vyložil 14 karet
+
+[2026-01-18 17:55:25] [INFO] [TID:137343448147648] protocol.c:172: Sending to client socket 7: JOKESTAT0042YY|AC|3S4S5S6S7S8S9SXSJSQSKSYYYYYY|TURN|14
+
+[2026-01-18 17:55:25] [INFO] [TID:137343448147648] protocol.c:172: Sending to client socket 5: JOKESTAT00672SASKCQCJCXC9C8C7C6C5C4C3C2C|AC|3S4S5S6S7S8S9SXSJSQSKSYYYYYY|WAIT|1
+
+[2026-01-18 17:55:26] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='CLOS' len=2 body='YY'
+
+[2026-01-18 17:55:26] [INFO] [TID:137343448147648] game_manager.c:978: Hráč 1 zavřel hru!
+
+[2026-01-18 17:55:26] [INFO] [TID:137343448147648] protocol.c:172: Sending to client socket 7: JOKEGEND0036W:tigoa|P:tigoa:0:14:0|P:tigo:93:0:0
+
+[2026-01-18 17:55:26] [INFO] [TID:137343448147648] protocol.c:172: Sending to client socket 5: JOKEGEND0036W:tigoa|P:tigoa:0:14:0|P:tigo:93:0:0
+
+[2026-01-18 17:55:28] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PLAG' len=0 body=''
+
+[2026-01-18 17:55:28] [INFO] [TID:137343448147648] room_manager.c:273: Ready: 1 | 1
+
+[2026-01-18 17:55:28] [INFO] [TID:137343448147648] room_manager.c:283: Stav: 0, Ready: 1
+
+[2026-01-18 17:55:28] [INFO] [TID:137343448147648] room_manager.c:284: Klient 1 v místnosti 0: READY (ready: 1/2)
+
+[2026-01-18 17:55:28] [INFO] [TID:137343448147648] client_manager.c:897: Hráč idx:1 chce hrát znovu!
+[2026-01-18 17:55:28] [INFO] [TID:137343448147648] protocol.c:172: Sending to client socket 7: JOKEESTR0025Čekání na protihráče
+
+[2026-01-18 17:55:28] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 5: JOKEPING0000
+
+[2026-01-18 17:55:28] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:55:28] [INFO] [TID:137343456540352] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:55:28] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:55:29] [INFO] [TID:137343456540352] client_manager.c:206: Přijato: type='PLAG' len=0 body=''
+
+[2026-01-18 17:55:29] [INFO] [TID:137343456540352] room_manager.c:273: Ready: 1 | 0
+
+[2026-01-18 17:55:29] [INFO] [TID:137343456540352] room_manager.c:273: Ready: 0 | 0
+
+[2026-01-18 17:55:29] [INFO] [TID:137343456540352] room_manager.c:283: Stav: 0, Ready: 2
+
+[2026-01-18 17:55:29] [INFO] [TID:137343456540352] room_manager.c:284: Klient 0 v místnosti 0: READY (ready: 2/2)
+
+[2026-01-18 17:55:29] [INFO] [TID:137343456540352] client_manager.c:897: Hráč idx:0 chce hrát znovu!
+[2026-01-18 17:55:29] [INFO] [TID:137343456540352] game_manager.c:89: Ničím hru pro místnost 0
+
+[2026-01-18 17:55:29] [INFO] [TID:137343456540352] game_manager.c:75: Hra vytvořena s 2 hráči
+
+[2026-01-18 17:55:29] [INFO] [TID:137343456540352] game_manager.c:112: Spouštím hru v místnosti 0
+
+[2026-01-18 17:55:29] [INFO] [TID:137343456540352] game_manager.c:1292: Balíček inicializován a zamíchán (108 karet)
+
+[2026-01-18 17:55:29] [INFO] [TID:137343456540352] game_manager.c:1311: Hráč 1 dostal 15 karet
+
+[2026-01-18 17:55:29] [INFO] [TID:137343456540352] game_manager.c:1311: Hráč 0 dostal 14 karet
+
+[2026-01-18 17:55:29] [INFO] [TID:137343456540352] game_manager.c:130: Hru zahajuje hráč: s ID 1
+
+[2026-01-18 17:55:29] [INFO] [TID:137343456540352] protocol.c:172: Sending to client socket 7: JOKESTRT0014Hra začíná!
+
+[2026-01-18 17:55:29] [INFO] [TID:137343456540352] protocol.c:172: Sending to client socket 5: JOKESTRT0014Hra začíná!
+
+[2026-01-18 17:55:29] [INFO] [TID:137343456540352] protocol.c:172: Sending to client socket 7: JOKETURN0011Jsi na tahu
+
+[2026-01-18 17:55:29] [INFO] [TID:137343456540352] protocol.c:172: Sending to client socket 7: JOKECRDS0044YY|YY|YY|YY|KS|QS|JS|XS|9S|8S|7S|6S|5S|4S|3S
+
+[2026-01-18 17:55:29] [INFO] [TID:137343456540352] protocol.c:172: Sending to client socket 5: JOKEWAIT0006Čekej
+
+[2026-01-18 17:55:29] [INFO] [TID:137343456540352] protocol.c:172: Sending to client socket 5: JOKECRDS00412S|AS|KC|QC|JC|XC|9C|8C|7C|6C|5C|4C|3C|2C
+
+[2026-01-18 17:55:29] [INFO] [TID:137343456540352] room_manager.c:273: Ready: 1 | 1
+
+[2026-01-18 17:55:29] [INFO] [TID:137343456540352] room_manager.c:283: Stav: 1, Ready: 1
+
+[2026-01-18 17:55:29] [INFO] [TID:137343456540352] room_manager.c:284: Klient 1 v místnosti 0: NOT READY (ready: 1/2)
+
+[2026-01-18 17:55:29] [INFO] [TID:137343456540352] protocol.c:172: Sending to client socket 7: JOKESTAT0042YYYYYYYYKSQSJSXS9S8S7S6S5S4S3S|AC||TURN|14
+
+[2026-01-18 17:55:29] [INFO] [TID:137343456540352] room_manager.c:273: Ready: 1 | 0
+
+[2026-01-18 17:55:29] [INFO] [TID:137343456540352] room_manager.c:273: Ready: 0 | 0
+
+[2026-01-18 17:55:29] [INFO] [TID:137343456540352] room_manager.c:283: Stav: 1, Ready: 0
+
+[2026-01-18 17:55:29] [INFO] [TID:137343456540352] room_manager.c:284: Klient 0 v místnosti 0: NOT READY (ready: 0/2)
+
+[2026-01-18 17:55:29] [INFO] [TID:137343456540352] protocol.c:172: Sending to client socket 5: JOKESTAT00402SASKCQCJCXC9C8C7C6C5C4C3C2C|AC||WAIT|15
+
+[2026-01-18 17:55:29] [DEBUG] [TID:137343456540352] client_manager.c:993: ROOM DEBUG: room_id=0 status=2 player_count=2 ready_count=0 game_instance=0x7ce9bc000c00
+[2026-01-18 17:55:29] [DEBUG] [TID:137343456540352] client_manager.c:1013: ROOM[0]: slot=0 idx=1 nick='tigoa' socket=7 connected=1 active=1 status=4 player_id=1 last_heartbeat=1768755328
+[2026-01-18 17:55:29] [DEBUG] [TID:137343456540352] client_manager.c:1013: ROOM[0]: slot=1 idx=0 nick='tigo' socket=5 connected=1 active=1 status=3 player_id=0 last_heartbeat=1768755329
+[2026-01-18 17:55:29] [DEBUG] [TID:137343456540352] client_manager.c:1031: GAME DEBUG: current_player_index=0 state=2
+[2026-01-18 17:55:31] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 5: JOKEPING0000
+
+[2026-01-18 17:55:31] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:55:31] [INFO] [TID:137343456540352] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:55:31] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:55:34] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 5: JOKEPING0000
+
+[2026-01-18 17:55:34] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:55:34] [INFO] [TID:137343456540352] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:55:34] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:55:37] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 5: JOKEPING0000
+
+[2026-01-18 17:55:37] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:55:37] [INFO] [TID:137343456540352] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:55:37] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:55:40] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 5: JOKEPING0000
+
+[2026-01-18 17:55:40] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:55:40] [INFO] [TID:137343456540352] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:55:40] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:55:43] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 5: JOKEPING0000
+
+[2026-01-18 17:55:43] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:55:43] [INFO] [TID:137343456540352] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:55:43] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:55:46] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 5: JOKEPING0000
+
+[2026-01-18 17:55:46] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:55:46] [INFO] [TID:137343456540352] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:55:46] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:55:49] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 5: JOKEPING0000
+
+[2026-01-18 17:55:49] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:55:49] [INFO] [TID:137343456540352] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:55:49] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:55:52] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 5: JOKEPING0000
+
+[2026-01-18 17:55:52] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:55:52] [INFO] [TID:137343456540352] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:55:52] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:55:55] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 5: JOKEPING0000
+
+[2026-01-18 17:55:55] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:55:55] [INFO] [TID:137343456540352] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:55:55] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:55:58] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 5: JOKEPING0000
+
+[2026-01-18 17:55:58] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:55:58] [INFO] [TID:137343456540352] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:55:58] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:56:01] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 5: JOKEPING0000
+
+[2026-01-18 17:56:01] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:56:01] [INFO] [TID:137343456540352] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:56:01] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:56:04] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 5: JOKEPING0000
+
+[2026-01-18 17:56:04] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:56:04] [INFO] [TID:137343456540352] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:56:04] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:56:07] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 5: JOKEPING0000
+
+[2026-01-18 17:56:07] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:56:07] [INFO] [TID:137343456540352] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:56:07] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:56:10] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 5: JOKEPING0000
+
+[2026-01-18 17:56:10] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:56:10] [INFO] [TID:137343456540352] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:56:10] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:56:13] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 5: JOKEPING0000
+
+[2026-01-18 17:56:13] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:56:13] [INFO] [TID:137343456540352] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:56:13] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:56:16] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 5: JOKEPING0000
+
+[2026-01-18 17:56:16] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:56:16] [INFO] [TID:137343456540352] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:56:16] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:56:19] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 5: JOKEPING0000
+
+[2026-01-18 17:56:19] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:56:19] [INFO] [TID:137343456540352] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:56:19] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:56:22] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 5: JOKEPING0000
+
+[2026-01-18 17:56:22] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:56:22] [INFO] [TID:137343456540352] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:56:22] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:56:25] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 5: JOKEPING0000
+
+[2026-01-18 17:56:25] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:56:25] [INFO] [TID:137343456540352] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:56:25] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:56:28] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 5: JOKEPING0000
+
+[2026-01-18 17:56:28] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:56:28] [INFO] [TID:137343456540352] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:56:28] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:56:31] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 5: JOKEPING0000
+
+[2026-01-18 17:56:31] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:56:31] [INFO] [TID:137343456540352] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:56:31] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:56:34] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 5: JOKEPING0000
+
+[2026-01-18 17:56:34] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:56:34] [INFO] [TID:137343456540352] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:56:34] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:56:37] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 5: JOKEPING0000
+
+[2026-01-18 17:56:37] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:56:37] [INFO] [TID:137343456540352] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:56:37] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:56:40] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 5: JOKEPING0000
+
+[2026-01-18 17:56:40] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:56:40] [INFO] [TID:137343456540352] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:56:40] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:56:40] [INFO] [TID:137343456540352] client_manager.c:187: Klient se odpojil (fd=5)
+
+[2026-01-18 17:56:40] [INFO] [TID:137343456540352] client_manager.c:1089: Klient tigo se odpojuje (fd=5, slot=0)
+
+[2026-01-18 17:56:40] [INFO] [TID:137343456540352] protocol.c:172: Sending to client socket 7: JOKEPAUS0023Hráč tigo se odpojil.
+
+[2026-01-18 17:56:40] [INFO] [TID:137343456540352] game_manager.c:1024: Pozastavuji hru v místnosti 0: Hra pozastavena - čeká se na reconnect
+
+[2026-01-18 17:56:40] [DEBUG] [TID:137343456540352] client_manager.c:1121:   -> Po odpojení: nick='tigo', socket_fd=-1, is_connected=0, disconnect_time=1768755400, status=0
+
+[2026-01-18 17:56:43] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:56:43] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:56:46] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:56:46] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:56:49] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:56:49] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:56:52] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:56:52] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:56:55] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:56:55] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:56:58] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:56:58] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:57:01] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:57:01] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:57:04] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:57:04] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:57:07] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:57:07] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:57:10] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:57:10] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:57:13] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:57:13] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:57:16] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:57:16] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:57:19] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:57:19] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:57:22] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:57:22] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:57:25] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:57:25] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:57:28] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:57:28] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:57:31] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:57:31] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:57:34] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:57:34] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:57:37] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:57:37] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:57:40] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:57:40] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:57:43] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:57:43] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:57:46] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:57:46] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:57:49] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:57:49] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:57:52] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:57:52] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:57:55] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:57:55] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:57:58] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:57:58] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:58:01] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:58:01] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:58:04] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:58:04] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:58:07] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:58:07] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:58:10] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:58:10] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:58:13] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:58:13] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:58:16] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:58:16] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:58:19] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:58:19] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:58:22] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:58:22] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:58:25] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:58:25] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:58:28] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:58:28] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:58:31] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:58:31] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:58:34] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:58:34] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:58:37] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:58:37] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:58:40] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:58:40] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:58:43] [INFO] [TID:137343464933056] client_manager.c:113: Mažu data hráče 'tigo' (reconnect timeout)
+
+[2026-01-18 17:58:43] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKELBBY0052Protihráč se nestihl znovu připojit. Hra končí.
+
+[2026-01-18 17:58:43] [INFO] [TID:137343464933056] game_manager.c:89: Ničím hru pro místnost 0
+
+[2026-01-18 17:58:43] [ERROR] [TID:137343464933056] room_manager.c:372: Chyba: Místnost 0 není prázdná
+
+[2026-01-18 17:58:43] [INFO] [TID:137343464933056] room_manager.c:204: Klient 0 opustil místnost 0 (0/2)
+
+[2026-01-18 17:58:43] [INFO] [TID:137343464933056] room_manager.c:206: Místnost 0 : player count == 0
+
+[2026-01-18 17:58:43] [INFO] [TID:137343464933056] room_manager.c:208: Místnost 0 je prázdná -- mažu
+
+[2026-01-18 17:58:43] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:58:43] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:58:46] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:58:46] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:58:49] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:58:49] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:58:52] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:58:52] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:58:55] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:58:55] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:58:58] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:58:58] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:59:01] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:59:01] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:59:04] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:59:04] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:59:07] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:59:07] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:59:10] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:59:10] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:59:13] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:59:13] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:59:16] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:59:16] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:59:19] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:59:19] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:59:22] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:59:22] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:59:25] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:59:25] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:59:28] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:59:28] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:59:31] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:59:31] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:59:34] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:59:34] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:59:37] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:59:37] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:59:40] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:59:40] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:59:43] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:59:43] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:59:46] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:59:46] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:59:49] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:59:49] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:59:52] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:59:52] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:59:55] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:59:55] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 17:59:58] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 17:59:58] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:00:01] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:00:01] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:00:04] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:00:04] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:00:07] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:00:07] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:00:10] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:00:10] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:00:13] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:00:13] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:00:16] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:00:16] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:00:19] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:00:19] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:00:22] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:00:22] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:00:25] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:00:25] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:00:28] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:00:28] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:00:31] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:00:31] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:00:34] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:00:34] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:00:37] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:00:37] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:00:40] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:00:40] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:00:43] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:00:43] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:00:46] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:00:46] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:00:49] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:00:49] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:00:52] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:00:52] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:00:55] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:00:55] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:00:58] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:00:58] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:01:01] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:01:01] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:01:04] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:01:04] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:01:07] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:01:07] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:01:10] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:01:10] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:01:13] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:01:13] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:01:16] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:01:16] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:01:19] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:01:19] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:01:22] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:01:22] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:01:25] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:01:25] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:01:28] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:01:28] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:01:31] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:01:31] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:01:34] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:01:34] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:01:36] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='RLIS' len=0 body=''
+
+[2026-01-18 18:01:36] [INFO] [TID:137343448147648] protocol.c:172: Sending to client socket 7: JOKEELIS0019Žádné místnosti
+
+[2026-01-18 18:01:37] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:01:37] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:01:40] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:01:40] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:01:43] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:01:43] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:01:46] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:01:46] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:01:49] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:01:49] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:01:52] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:01:52] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:01:55] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:01:55] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:01:58] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:01:58] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:02:01] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:02:01] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:02:04] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:02:04] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:02:07] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:02:07] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:02:10] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:02:10] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:02:13] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:02:13] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:02:16] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:02:16] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:02:19] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:02:19] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:02:22] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:02:22] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:02:25] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:02:25] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:02:28] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:02:28] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:02:31] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:02:31] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:02:34] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:02:34] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:02:37] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:02:37] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:02:40] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:02:40] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:02:43] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:02:43] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:02:46] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:02:46] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:02:49] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:02:49] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:02:52] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:02:52] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:02:55] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:02:55] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:02:58] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:02:58] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:03:01] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:03:01] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:03:04] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:03:04] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:03:07] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:03:07] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:03:10] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:03:10] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:03:13] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:03:13] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:03:16] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:03:16] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:03:19] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:03:19] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:03:22] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:03:22] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:03:25] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:03:25] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:03:28] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:03:28] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:03:31] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:03:31] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:03:34] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:03:34] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:03:37] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:03:37] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:03:40] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:03:40] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:03:43] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:03:43] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:03:46] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:03:46] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:03:49] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:03:49] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:03:52] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:03:52] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:03:55] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:03:55] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:03:58] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:03:58] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:04:01] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:04:01] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:04:04] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:04:04] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:04:07] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:04:07] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:04:10] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:04:10] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:04:13] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:04:13] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:04:16] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:04:16] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:04:19] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:04:19] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:04:22] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:04:22] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:04:25] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:04:25] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:04:28] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:04:28] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:04:31] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:04:31] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:04:34] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:04:34] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:04:37] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:04:37] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:04:40] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:04:40] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:04:43] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:04:43] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:04:46] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:04:46] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:04:49] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:04:49] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:04:52] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:04:52] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:04:55] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:04:55] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:04:58] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:04:58] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:05:01] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:05:01] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:05:04] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:05:04] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:05:07] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:05:07] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:05:10] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:05:10] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:05:13] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:05:13] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:05:16] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:05:16] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:05:19] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:05:19] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:05:22] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:05:22] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:05:25] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:05:25] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:05:28] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:05:28] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:05:31] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:05:31] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:05:34] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:05:34] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:05:37] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:05:37] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:05:40] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:05:40] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:05:43] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:05:43] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:05:46] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:05:46] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:05:49] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:05:49] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:05:52] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:05:52] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:05:55] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:05:55] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:05:58] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:05:58] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:06:01] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:06:01] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:06:04] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:06:04] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:06:07] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:06:07] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:06:10] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:06:10] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:06:13] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:06:13] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:06:16] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:06:16] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:06:19] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:06:19] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:06:22] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:06:22] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:06:25] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:06:25] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:06:28] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:06:28] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:06:31] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:06:31] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:06:34] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:06:34] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:06:37] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:06:37] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:06:40] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:06:40] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:06:43] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:06:43] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:06:46] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:06:46] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:06:49] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:06:49] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:06:52] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:06:52] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:06:55] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:06:55] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:06:58] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:06:58] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:07:01] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:07:01] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:07:04] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:07:04] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:07:07] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:07:07] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:07:10] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:07:10] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:07:13] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:07:13] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:07:16] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:07:16] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:07:19] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:07:19] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:07:22] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:07:22] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:07:25] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:07:25] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:07:28] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:07:28] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:07:31] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:07:31] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:07:34] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:07:34] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:07:37] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:07:37] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:07:40] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:07:40] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:07:43] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:07:43] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:07:46] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:07:46] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:07:49] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:07:49] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:07:52] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:07:52] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:07:55] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:07:55] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:07:58] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:07:58] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:08:01] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:08:01] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:08:04] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:08:04] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:08:07] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:08:07] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:08:10] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:08:10] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:08:13] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:08:13] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:08:16] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:08:16] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:08:19] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:08:19] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:08:22] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:08:22] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:08:25] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:08:25] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:08:28] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:08:28] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:08:31] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:08:31] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:08:34] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:08:34] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:08:37] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:08:37] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:08:40] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:08:40] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:08:43] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:08:43] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:08:46] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:08:46] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:08:49] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:08:49] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:08:52] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:08:52] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:08:55] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:08:55] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:08:58] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:08:58] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:09:01] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:09:01] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:09:04] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:09:04] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:09:07] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:09:07] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:09:10] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:09:10] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:09:13] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:09:13] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:09:16] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:09:16] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:09:19] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:09:19] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:09:22] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:09:22] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:09:25] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:09:25] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:09:28] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:09:28] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:09:31] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:09:31] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:09:34] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:09:34] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:09:37] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:09:37] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:09:40] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:09:40] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:09:43] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:09:43] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:09:46] [INFO] [TID:137343464933056] protocol.c:172: Sending to client socket 7: JOKEPING0000
+
+[2026-01-18 18:09:46] [INFO] [TID:137343448147648] client_manager.c:206: Přijato: type='PONG' len=0 body=''
+
+[2026-01-18 18:09:48] [INFO] [TID:137343448147648] client_manager.c:187: Klient se odpojil (fd=7)
+
+[2026-01-18 18:09:48] [INFO] [TID:137343448147648] client_manager.c:1089: Klient tigoa se odpojuje (fd=7, slot=1)
+
+[2026-01-18 18:09:48] [DEBUG] [TID:137343448147648] client_manager.c:1121:   -> Po odpojení: nick='tigoa', socket_fd=-1, is_connected=0, disconnect_time=1768756188, status=0
+
