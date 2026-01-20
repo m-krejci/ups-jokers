@@ -5,7 +5,7 @@
 #include "protocol.h"
 #include "room_manager.h"
 
-#define HEARTBEAT_TIMEOUT 10
+#define HEARTBEAT_TIMEOUT 1000
 #define RECONNECT_TIMEOUT 120
 
 // Enum o stavech hráče (klienta)

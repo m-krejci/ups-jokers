@@ -1,6 +1,8 @@
 .github
 build
-fucking kopie
 src
 test
 build/*
+*.o
+zolik_server
+server.log

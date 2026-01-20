@@ -81,9 +81,19 @@ int read_full_message(int client_sock, ProtocolHeader* header_out, char** messag
     char header_buffer[HEADER_LEN + 1];
     char len_str[LENGTH_LEN + 1];
     int message_len;
+    char c;
+
+    while(1){
+        ssize_t r = recv(client_sock, &c, 1, 0);
+        if(r <= 0) return -1;
+        if(c == 'J'){
+            header_buffer[0] = 'J';
+            break;
+        }
+    }
 
     // přečtení hlavičky
-    if(custom_receive(client_sock, header_buffer, HEADER_LEN) != HEADER_LEN){
+    if(custom_receive(client_sock, header_buffer + 1, HEADER_LEN - 1) != HEADER_LEN - 1){
         // printf("Chyba: došlo k chybě při čtení hlavičky\n");
         return -1;
     }
@@ -122,8 +132,7 @@ int read_full_message(int client_sock, ProtocolHeader* header_out, char** messag
         return -4;
     }
 
-    // ********** PŘEVOD ASCII délky na int **********
-    message_len = atoi(len_str);  // ********** OPRAVENO: správný int **********
+    message_len = atoi(len_str);  
     header_out->message_len = message_len;
 
     *message_out = (char *)malloc(message_len + 1);

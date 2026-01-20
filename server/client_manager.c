@@ -96,7 +96,8 @@ void check_client_timeouts(){
                         broadcast_to_room(room->room_id, PAUS, "Protihráč se odpojil", -1);
                         pthread_mutex_lock(&clients_mutex);
                     }
-                    close(clients[i].socket_fd);
+                    int sock = clients[i].socket_fd;
+                    close(sock);
                     clients[i].socket_fd = -1;
                 }
 

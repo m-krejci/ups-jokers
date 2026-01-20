@@ -10,6 +10,8 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <pthread.h>
+#include <ctype.h>
+#include <string.h>
 
 void error(const char *msg){
     LOG_ERROR("%s", msg);
@@ -25,6 +27,34 @@ void* timeout_checker_thread(void* arg){
     }
 
     return NULL;
+}
+
+int is_valid_ip(const char *ip) {
+    int dots = 0;
+    char *copy = strdup(ip);
+    if (!copy) return 0;
+
+    char *token = strtok(copy, ".");
+    while (token) {
+        for (int i = 0; token[i]; i++) {
+            if (!isdigit(token[i])) {
+                free(copy);
+                return 0;
+            }
+        }
+
+        int num = atoi(token);
+        if (num < 0 || num > 255) {
+            free(copy);
+            return 0;
+        }
+
+        token = strtok(NULL, ".");
+        dots++;
+    }
+
+    free(copy);
+    return dots == 4;
 }
 
 void start_server(){
@@ -50,13 +80,18 @@ void start_server(){
 
     // nastavení adresy a portu
     address.sin_family = AF_INET;
-    // if(SERVER_ADDRESS){
-    //     inet_pton(AF_INET, SERVER_ADDRESS, &address.sin_addr);
-    // }
-    // else{
-    //     address.sin_addr.s_addr = INADDR_ANY;
-    // }
-    address.sin_addr.s_addr = INADDR_ANY;
+    if(is_valid_ip(SERVER_ADDRESS)){
+        if(inet_pton(AF_INET, SERVER_ADDRESS, &address.sin_addr) <= 0){
+            printf("error inet");
+        }
+        else{
+            printf("%s\n", SERVER_ADDRESS);
+        }
+    }
+    else{
+        address.sin_addr.s_addr = INADDR_ANY;
+    }
+    // address.sin_addr.s_addr = INADDR_ANY;
     address.sin_port = htons(SERVER_PORT);
 
     // bind
