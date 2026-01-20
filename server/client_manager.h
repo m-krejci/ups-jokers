@@ -31,7 +31,8 @@ typedef struct{
     time_t disconnect_time;                 // Čas odpojení
     int is_connected;                       // Stav připojení
     GameRoom *current_room;                 // Momentální místnost klienta
-    PlayerStatus last_status;
+    PlayerStatus last_status;               // Poslední stav klienta
+    char token[11];                         // token pro reconnect
 } ClientContext;
 
 // Kontext klienta pro klientské vlákno

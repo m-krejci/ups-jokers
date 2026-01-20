@@ -89,6 +89,7 @@ class ClientGUI:
         self.server_error = ""
         self.port_text = "10000"
         self.port_error = ""
+        self.token = ""
 
         # GAMESCREEN : LOBBY
         self.show_create_room_popup = False
@@ -341,7 +342,7 @@ class ClientGUI:
                 
                 # 3. Odeslání LOGI
                 log_msg(INFO, f"[RECONNECT] Odesílám LOGI zprávu...")
-                packet = build_message(Message_types.LOGI.value, self.login_text)
+                packet = build_message(Message_types.LOGI.value, f"{self.login_text}|{self.token}")
                 new_sock.sendall(packet)
                 log_msg(INFO, f"[RECONNECT] LOGI odeslán")
                 
@@ -428,7 +429,13 @@ class ClientGUI:
                                 self.game_state = GameState.CONNECTED
 
                             self.game_state = GameState.CONNECTED
-                            self.game_console.log(message, False)
+                            
+                            splitted = message.split("|")
+                            if len(splitted) == 2:
+                                self.token = splitted[1].strip()
+                                self.game_console.log(splitted[0], False)
+                            else:
+                                self.game_console.log(message, False)
                         
                         elif type_msg == Message_types.RECO.value:
                             log_msg(INFO, f"[GUI] RECO přijato - reconnect úspěšný!")

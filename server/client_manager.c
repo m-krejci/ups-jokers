@@ -23,17 +23,16 @@ void initialize_clients(){
         clients[i].is_active = 0;
         clients[i].status = DISCONNECTED;
         clients[i].last_heartbeat = 0;
-        clients[i].disconnect_time = 0;  // DŮLEŽITÉ: nastav na 0
+        clients[i].disconnect_time = 0;
     }
     
     pthread_mutex_unlock(&clients_mutex);
     LOG_INFO("Klienti nainicializováni (MAX_CLIENTS=%d)\n", MAX_CLIENTS);
-    // printf("Klienti nainicializováni (MAX_CLIENTS=%d)\n", MAX_CLIENTS);
 }
 
 void remove_client(int client_socket){
     pthread_mutex_lock(&clients_mutex);
-    
+    // odstraní klienta z paměti
     for(int i = 0; i < MAX_CLIENTS; i++) {
         if(clients[i].socket_fd == client_socket) {
             close(clients[i].socket_fd);
@@ -44,7 +43,6 @@ void remove_client(int client_socket){
             break;
         }
     }
-
     pthread_mutex_unlock(&clients_mutex);
 }
 
@@ -151,6 +149,20 @@ void check_client_timeouts(){
     pthread_mutex_unlock(&clients_mutex);
 }
 
+void generate_token(char *token, int length) {
+    // Definice povolených znaků (abeceda pro token)
+    const char charset[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    int charset_size = sizeof(charset) - 1;
+
+    for (int i = 0; i < length; i++) {
+        int key = rand() % charset_size;
+        token[i] = charset[key];
+    }
+    
+    // Každý řetězec v C musí být zakončen nulovým znakem
+    token[length] = '\0';
+}
+
 void* client_handler(void* arg){
     ThreadContext *context = (ThreadContext*)arg;
     int client_sock = context->socket_fd;
@@ -173,7 +185,7 @@ void* client_handler(void* arg){
     pthread_mutex_unlock(&clients_mutex);
     
     LOG_INFO("Vlákno spuštěno pro klienta (fd=%d, index=%d)\n", client_sock, client_index);
-    printf("Vlákno spuštěno pro klienta (fd=%d, index=%d, nick=%s)\n", client_sock, client_index, client->nick);
+    // printf("Vlákno spuštěno pro klienta (fd=%d, index=%d, nick=%s)\n", client_sock, client_index, client->nick);
 
     while(1){
         ProtocolHeader header;
@@ -221,6 +233,18 @@ void* client_handler(void* arg){
                         break;
                     }
 
+                    // Tady je potřeba pokus o rozparsování, pokud se ve zprávě nachází | delimeter
+                    
+                    char *nick = strtok(message_body, "|");
+                    char *token = strtok(NULL, "|");
+
+                    if (token != NULL) {
+                        // Případ: nick|token
+                        printf("Reconnect: Nick: %s, Token: %s\n", nick, token);
+                    } else {
+                        // Případ: pouze nick
+                        printf("Nove pripojeni: Nick: %s\n", nick);
+}
 
                     // POKUS O RECONNECT - najdi hráče podle nicku
                     int existing_idx = find_player_by_nick(message_body);
@@ -263,7 +287,7 @@ void* client_handler(void* arg){
                     }
                     
                     if(existing_idx >= 0) {
-                        if(clients[existing_idx].is_connected) {
+                        if(clients[existing_idx].is_connected|| strcmp(!clients[existing_idx].token, token) != 0) {
                             LOG_DEBUG("DEBUG: Jméno je obsazené (is_connected=1)\n");
                             send_error(client->socket_fd, "Uživatel již existuje");
                             break;
@@ -349,10 +373,13 @@ void* client_handler(void* arg){
                     client->status = CONNECTED;
                     client->is_connected = 1;
                     client->invalid_message_count = 0;
+                    generate_token(client->token, 10);
                     
-                    send_message(client->socket_fd, OKAY, "Vítej ve hře!");
-                    LOG_INFO("Nový klient '%s' přihlášen (fd=%d, slot=%d)\n", 
-                           client->nick, client->socket_fd, client_index);
+                    char message[40];
+                    snprintf(message, sizeof(message), "Vítej ve hře!|%s", client->token);
+                    send_message(client->socket_fd, OKAY, message);
+                    LOG_INFO("Nový klient '%s' přihlášen (fd=%d, slot=%d, token=%s)\n", 
+                           client->nick, client->socket_fd, client_index, client->token);
                     
                 } else if(strcmp(header.type_msg, QUIT) == 0) {
                     should_disconnect = 1;
