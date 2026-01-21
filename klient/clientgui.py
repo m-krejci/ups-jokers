@@ -341,7 +341,7 @@ class ClientGUI:
                 
                 # 3. Odeslání LOGI
                 log_msg(INFO, f"[RECONNECT] Odesílám LOGI zprávu...")
-                packet = build_message(Message_types.LOGI.value, f"{self.login_text}|{self.token}+")
+                packet = build_message(Message_types.LOGI.value, f"{self.login_text}|{self.token}")
                 new_sock.sendall(packet)
                 log_msg(INFO, f"[RECONNECT] LOGI odeslán {self.login_text}|{self.token}")
                 
