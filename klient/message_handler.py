@@ -35,8 +35,16 @@ def receive_full_message(sock: socket.socket) -> tuple[str, str]:
     Returns:
         tuple[str, str]: Vrací typ a konkrétní zprávu pro manipulaci
     """
+    while True:
+        char = sock.recv(1)
+        if not char:
+            raise ConnectionError("Spojení se serverem uzavřeno.")
+        
+        if char == b'J':
+            header_bytes = char
+            break
     # Čtení headeru po částech, dokud se nepřečte celý nebo nenastane chyba
-    header_bytes = b""
+
     while(len(header_bytes) < HEADER_LEN):
         chunk = sock.recv(HEADER_LEN - len(header_bytes))
         if not chunk:
@@ -44,7 +52,7 @@ def receive_full_message(sock: socket.socket) -> tuple[str, str]:
         header_bytes += chunk
     
     # Naparsování zprávy
-    header_str = header_bytes.decode("utf-8")
+    header_str = header_bytes.decode("utf-8").replace('\x00', '').strip('\n')
     magic = header_str[:MAGIC_LEN]
     type_msg = header_str[MAGIC_LEN:MAGIC_LEN+TYPE_LEN].strip()
     length = header_str[MAGIC_LEN+TYPE_LEN:LENGTH_LEN + MAGIC_LEN + TYPE_LEN]

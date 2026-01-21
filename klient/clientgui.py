@@ -149,7 +149,6 @@ class ClientGUI:
         # načtení karet
         self._load_assets()
 
-
     def _load_assets(self):
         # Struktury pro uchování definovaných názvů karet
         ranks = ["2", "3", "4", "5", "6", "7", "8", "9", "X", "J", "Q", "K", "A"]
@@ -342,9 +341,9 @@ class ClientGUI:
                 
                 # 3. Odeslání LOGI
                 log_msg(INFO, f"[RECONNECT] Odesílám LOGI zprávu...")
-                packet = build_message(Message_types.LOGI.value, f"{self.login_text}|{self.token}")
+                packet = build_message(Message_types.LOGI.value, f"{self.login_text}|{self.token}+")
                 new_sock.sendall(packet)
-                log_msg(INFO, f"[RECONNECT] LOGI odeslán")
+                log_msg(INFO, f"[RECONNECT] LOGI odeslán {self.login_text}|{self.token}")
                 
                 # 4. Předání řízení síťovému vláknu
                 log_msg(INFO, f"[RECONNECT] Předávám socket network threadu...")
@@ -691,23 +690,28 @@ class ClientGUI:
                             self.new_cards = True
 
                         elif type_msg == Message_types.GEND.value:
-                            splitted = message.split("|")
-                            temp = splitted[0].split(":")
-                            self.results["winner"] = temp[1]
+                            try:
+                                splitted = message.split("|")
+                                temp = splitted[0].split(":")
+                                self.results["winner"] = temp[1]
 
-                            temp = splitted[1].split(":")
-                            if temp[1] == self.results["winner"]:
-                                self.results["winner_stat"] = [temp[1], temp[2], temp[3], temp[4]]
-                            else:
-                                self.results["loser_stat"] = [temp[1], temp[2], temp[3], temp[4]]
+                                temp = splitted[1].split(":")
+                                if temp[1] == self.results["winner"]:
+                                    self.results["winner_stat"] = [temp[1], temp[2], temp[3], temp[4]]
+                                else:
+                                    self.results["loser_stat"] = [temp[1], temp[2], temp[3], temp[4]]
 
-                            temp = splitted[2].split(":")
-                            if temp[1] == self.results["winner"]:
-                                self.results["winner_stat"] = [temp[1], temp[2], temp[3], temp[4]]
-                            else:
-                                self.results["loser_stat"] = [temp[1], temp[2], temp[3], temp[4]]
-
-                            self.game_state = GameState.GAME_DONE
+                                temp = splitted[2].split(":")
+                                if temp[1] == self.results["winner"]:
+                                    self.results["winner_stat"] = [temp[1], temp[2], temp[3], temp[4]]
+                                else:
+                                    self.results["loser_stat"] = [temp[1], temp[2], temp[3], temp[4]]
+                                self.game_state = GameState.GAME_DONE
+                            except:
+                                log_msg(INFO, "Nesprávný formát.")
+                                self.game_state = GameState.CONNECTED
+                                self.game_console.log("Přišel nesprávný formát herního stavu", True)
+                                self.send_message("CNNT", "Hrál pouze jeden hráč")
 
                         elif type_msg == Message_types.PAUS.value:
                             self.game_state = GameState.PAUSED
@@ -1111,4 +1115,3 @@ class ClientGUI:
 
         pygame.quit()
         sys.exit()
-

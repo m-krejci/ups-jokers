@@ -21,6 +21,7 @@ class Network(threading.Thread):
         self.last_contact = time.time()
         self.connected = False
         self.first_ping_received = False
+        self.expecting_disconnect = False
         
         self._stop_lock = threading.Lock()
 
@@ -113,6 +114,7 @@ class Network(threading.Thread):
                 self.last_contact = time.time()
 
                 if type_msg == Message_types.PING.value:
+                    self.expecting_disconnect = False
                     if not self.first_ping_received:
                         self.first_ping_received = True
                         log_msg(INFO, "[NETWORK] !!!!! První PING přijat !!!!!")
@@ -129,6 +131,12 @@ class Network(threading.Thread):
                     except Exception as e:
                         log_msg(ERROR, f"[NETWORK] !!! Chyba při odesílání PONG: {e}")
                         raise
+                    continue
+
+                if type_msg == Message_types.ERRR.value:
+                    log_msg(INFO, f"[NETWORK] Přijata chyba ze serveru {message}")
+                    self.expecting_disconnect = True
+                    self.message_queue.put(("message", type_msg, message))
                     continue
 
                 if type_msg == Message_types.RECO.value:
@@ -154,8 +162,12 @@ class Network(threading.Thread):
                     if self.running:
                         self.running = False
                         self.connected = False
-                        log_msg(INFO, f"[NETWORK] Posílám network_lost (connection error)")
-                        self.message_queue.put(("network_lost", f"{type(e).__name__}: {str(e)}"))
+
+                        if self.expecting_disconnect:
+                            log_msg(INFO, "[NETWORK] Odpojení bylo očekáváno [ERRR]")
+                        else:
+                            log_msg(INFO, f"[NETWORK] Posílám network_lost (connection error)")
+                            self.message_queue.put(("network_lost", f"{type(e).__name__}: {str(e)}"))
                 break
 
             except ConnectionResetError:
