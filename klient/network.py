@@ -109,6 +109,18 @@ class Network(threading.Thread):
             try:
                 log_msg(INFO, f"[NETWORK] Loop #{loop_counter}: Čekám na zprávu (running={self.running})...")
                 type_msg, message = receive_full_message(self.sock)
+                if type_msg == 0 and message == 0:
+                    log_msg(ERROR, "[NETWORK] Server poslal nevalidní data nebo došlo k neočekávanému ukončení streamu!")
+                    self.message_queue.put(("error", "Server sent invalid data."))
+                    
+                    self.expecting_disconnect = True
+                    self.running = False
+                    try:
+                        self.sock.close()
+                    except:
+                        pass
+                    break
+
                 log_msg(INFO, f"[NETWORK] Loop #{loop_counter}: Zpráva přijata: {type_msg}")
 
                 self.last_contact = time.time()

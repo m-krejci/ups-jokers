@@ -194,7 +194,10 @@ class ClientGUI:
             
             self.network_thread = Network(self.sock, self.message_queue)
             self.network_thread.start()
-            self.send_message(Message_types.LOGI.value, self.login_text)
+            if self.token:
+                self.send_message(Message_types.LOGI.value, f"{self.login_text}|{self.token}")
+            else:    
+                self.send_message(Message_types.LOGI.value, self.login_text)
             
         except Exception as e:
             log_msg(ERROR, f"Chyba při navazování spojení: {e}")
@@ -400,6 +403,8 @@ class ClientGUI:
                     log_msg(ERROR, f"[GUI] ERROR: {item[1]}")
                     self.connected = False
                     self.game_state = GameState.DISCONNECTED
+                    self.waiting_for_login_response = False
+                    self.connect_error = item[1]
                     continue
                 
                 # PRIORITA 3: reconnect_success
@@ -726,6 +731,32 @@ class ClientGUI:
                         elif type_msg == Message_types.PAUS.value:
                             self.game_state = GameState.CONNECTED
 
+                        elif type_msg == Message_types.STAT.value:
+                            zprava = message.split("|")
+                            karty = zprava[0]
+                            self.cards_list = []
+                            start, end = 0, 2
+
+                            for i in range(len(karty) // 2):
+                                self.cards_list.append(karty[start:end])
+                                start += 2
+                                end += 2
+                            
+                            self.discard = zprava[1]
+
+                            sekvence = zprava[2]
+                            self.sequence_list = sekvence.split(",")
+
+                            if len(sekvence) >= 1:
+                                self.seq_existing = True
+                            else:
+                                self.seq_existing = False
+
+                            poradi = zprava[3]
+
+                            self.enemy_hand_count = int(zprava[4])
+                            self.new_cards = True
+
                         elif type_msg == Message_types.ESTR.value:
                             print(message)
 
@@ -741,6 +772,8 @@ class ClientGUI:
                             self.game_state = GameState.IN_GAME
                             self.user_disconnected = ""
                             self.game_console.log(message, False)
+
+                        
 
                         elif type_msg == Message_types.LBBY.value:
                             self.game_state = GameState.CONNECTED

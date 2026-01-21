@@ -1,7 +1,7 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
-#define SERVER_ADDRESS "192.168.208.195"
+#define SERVER_ADDRESS "" //"192.168.208.195"
 #define SERVER_PORT 10000
 #define MAX_CLIENTS 10
 #define MAX_ROOM_LIMIT 2

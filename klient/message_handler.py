@@ -1,6 +1,7 @@
 from constants import *
 import socket
 from logger import *
+from message_types import *
 
 
 def build_message(type_msg: str, message: str):
@@ -56,8 +57,21 @@ def receive_full_message(sock: socket.socket) -> tuple[str, str]:
     magic = header_str[:MAGIC_LEN]
     type_msg = header_str[MAGIC_LEN:MAGIC_LEN+TYPE_LEN].strip()
     length = header_str[MAGIC_LEN+TYPE_LEN:LENGTH_LEN + MAGIC_LEN + TYPE_LEN]
-    msg_len = int(length)
+    try:
+        msg_len = int(length)
+    except: 
+        return 0, 0
 
+    print(header_str)
+    if magic != MAGIC:
+        return 0, 0
+    
+    if not any(type_msg == item.value for item in Message_types):
+        return 0, 0
+    
+    if msg_len > 9999:
+        return 0, 0
+    
     # Čtení zprávy po částech, dokud se nepřečte celá nebo nenastane chyba
     message = b""
     while len(message) < msg_len:

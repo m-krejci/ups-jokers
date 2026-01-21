@@ -326,6 +326,35 @@ void* client_handler(void* arg){
                             pthread_mutex_unlock(&clients_mutex);
                             
                             send_message(clients[client_index].socket_fd, RECO, "Reconnect úspěšný");
+                            switch(client->last_status){
+                            case CONNECTED:
+                                send_message(client->socket_fd, OKAY, "LOBBY");
+                                break;
+                            
+                            case IN_ROOM:
+                                send_message(client->socket_fd, OKAY, "LOBBY");
+                                break;
+
+                            case ON_TURN:
+                                send_message(client->socket_fd, OKAY, "TURN");
+                                break;
+                            
+                            case ON_WAIT:
+                                send_message(client->socket_fd, OKAY, "WAIT");
+                                break;
+
+                            case GAME_DONE:
+                                send_message(client->socket_fd, OKAY, "LOBBY");
+                                break;
+
+                            case PAUSED:
+                                send_message(client->socket_fd, OKAY, "PAUSED");
+                                break;
+                            
+                            default:
+                                send_message(client->socket_fd, OKAY, "LOBBY");
+                                break;
+                        }
                             LOG_INFO("Reconnect úspesny");
                             usleep(10000);
                             
