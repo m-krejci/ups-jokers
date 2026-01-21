@@ -61,6 +61,7 @@ void disconnect_critical(int client_index, const char* reason){
 int find_player_by_nick(const char* nick){
     for(int i = 0; i < MAX_CLIENTS; i++){
         if(clients[i].nick[0] != '\0' && strcmp(clients[i].nick, nick) == 0){
+            // printf("%d\n",clients[i].socket_fd);
             return i;
         }
     }
@@ -72,7 +73,6 @@ void check_client_timeouts(){
     time_t now = time(NULL);
 
     pthread_mutex_lock(&clients_mutex);
-
     for(int i = 0; i < MAX_CLIENTS; i++){
         if(clients[i].socket_fd == -1 && !clients[i].is_active && clients[i].nick[0] == '\0'){
             continue;
@@ -108,6 +108,9 @@ void check_client_timeouts(){
                 }
             }
         } else {
+            if(clients[i].is_active){
+                continue;
+            }
             if (now - clients[i].disconnect_time > RECONNECT_TIMEOUT) {
                 LOG_INFO("Mažu data hráče '%s' (reconnect timeout)\n", clients[i].nick);
 
@@ -157,6 +160,7 @@ void generate_token(char *token, int length) {
     for (int i = 0; i < length; i++) {
         int key = rand() % charset_size;
         token[i] = charset[key];
+        // token[i] = charset[0];
     }
     
     // Každý řetězec v C musí být zakončen nulovým znakem
@@ -198,7 +202,8 @@ void* client_handler(void* arg){
         if(message_status == -1) {
             // Klient se odpojil nebo síťová chyba
             LOG_INFO("Klient se odpojil (fd=%d)\n", client_sock);
-            printf("Klient se odpojil (fd=%d)\n", client_sock);
+            // printf("Klient se odpojil (fd=%d)\n", client_sock);
+            printf("Klient se odpojil.\n");
             if(message_body) free(message_body);
             break;
         }
@@ -227,92 +232,91 @@ void* client_handler(void* arg){
 
         switch(client->status){
             case DISCONNECTED: {
+
                 if(strcmp(header.type_msg, LOGI) == 0) {
                     if(!message_body || strlen(message_body) == 0 || strlen(message_body) > NICK_LEN) {
                         send_error(client->socket_fd, "Neplatná délka nicku");
+                        close(client_sock);
                         break;
                     }
 
                     // Tady je potřeba pokus o rozparsování, pokud se ve zprávě nachází | delimeter
+                    char nick[NICK_LEN + 1] = {0};
+                    char token[TOKEN_LEN + 1] = {0};
+                    int has_token = 0;
                     
-                    char *nick = strtok(message_body, "|");
-                    char *token = strtok(NULL, "|");
+                    const char *sep = strchr(message_body, '|');
 
-                    if (token != NULL) {
-                        // Případ: nick|token
-                        printf("Reconnect: Nick: %s, Token: %s\n", nick, token);
-                    } else {
-                        // Případ: pouze nick
-                        printf("Nove pripojeni: Nick: %s\n", nick);
-}
+                    if (sep) {
+                        size_t nick_len = sep - message_body;
+                        
+                        const char *token_ptr = sep + 1;
+                        size_t token_len_received = strlen(token_ptr);
 
-                    // POKUS O RECONNECT - najdi hráče podle nicku
-                    int existing_idx = find_player_by_nick(message_body);
-
-                    // printf("Existing player: %d\n", existing_idx);
-
-                    // printf("%d\n", clients[existing_idx].last_status);
-
-                    if(existing_idx >= 0){
-                        switch (clients[existing_idx].last_status)
-                            {
-                            case CONNECTED:
-                                send_message(clients[existing_idx].socket_fd, OKAY, "LOBBY");
-                                break;
-
-                            case IN_ROOM:
-                                send_message(clients[existing_idx].socket_fd, OKAY, "LOBBY");
-                                break;
-
-                            case ON_TURN:
-                                send_message(clients[existing_idx].socket_fd, OKAY, "TURN");
-                                break;
-
-                            case ON_WAIT:
-                                send_message(clients[existing_idx].socket_fd, OKAY, "WAIT");
-                                break;
-
-                            case GAME_DONE:
-                                send_message(clients[existing_idx].socket_fd, OKAY, "LOBBY");
-                                break;
-
-                            case PAUSED:
-                                send_message(clients[existing_idx].socket_fd, OKAY, "PAUSED");
-                                break;
-
-                            default:
-                                send_message(clients[existing_idx].socket_fd, OKAY, "LOBBY");
-                                break;
-                            }
-                    }
-                    
-                    if(existing_idx >= 0) {
-                        if(clients[existing_idx].is_connected|| strcmp(!clients[existing_idx].token, token) != 0) {
-                            LOG_DEBUG("DEBUG: Jméno je obsazené (is_connected=1)\n");
-                            send_error(client->socket_fd, "Uživatel již existuje");
+                        if (nick_len == 0 || nick_len > NICK_LEN) {
+                            send_error(client->socket_fd, "Neplatná délka nicku");
                             break;
                         }
-                        else {
-                            // RECONNECT!
-                            // printf("=== RECONNECT START ===\n");
-                            
-                            if(existing_idx != client_index) {
-                                LOG_INFO("Hráč '%s' se reconnectuje (slot %d -> slot %d)\n", 
-                                    message_body, client_index, existing_idx);
 
-                                clients[existing_idx].socket_fd = client_sock;
-                                clients[existing_idx].is_active = 1;
+                        if (token_len_received != TOKEN_LEN) {
+                            send_error(client->socket_fd, "Neplatná délka tokenu");
+                            break; 
+                        }
 
-                                client->socket_fd = -1000;
-                                client->is_active = 0;
-                                
-                                client_index = existing_idx;
-                                client = &clients[client_index];
-                            } else {
-                                LOG_INFO("Hráč '%s' se reconnectuje na STEJNÝ slot %d\n", message_body, client_index);
-                                client->socket_fd = client_sock;
-                                client->is_active = 1;
-                            }
+                        memcpy(nick, message_body, nick_len);
+                        nick[nick_len] = '\0';
+
+                        memcpy(token, token_ptr, TOKEN_LEN);
+                        token[TOKEN_LEN] = '\0';
+
+                        has_token = 1;
+                        // printf("Reconnect pokus: nick=%s, token=%s\n", nick, token);
+                        printf("Pokus o reconnect.\n");
+                    }
+                    else{
+                        size_t nick_len = strlen(message_body);
+
+                        if(nick_len == 0 || nick_len > NICK_LEN){
+                            send_error(client->socket_fd, "Neplatná délka nicku");
+                            break;
+                        }
+                        strncpy(nick, message_body, NICK_LEN);
+                        nick[NICK_LEN] = '\0';
+
+                        printf("Nové připojení: nick=%s\n", nick);
+                    }
+                
+
+                    // POKUS O RECONNECT - najdi hráče podle nicku
+                    int existing_idx = find_player_by_nick(nick);
+                    
+                    if(existing_idx >= 0) {
+                        if(clients[existing_idx].is_connected || !has_token){
+                            LOG_DEBUG("DEBUG: Jméno je obsazené (is_connected=1)\n");
+                            send_error(client->socket_fd, "Uživatel již existuje");
+                            close(client->socket_fd);
+                            break;
+                        }
+
+                        if (strcmp(clients[existing_idx].token, token) != 0){
+                            send_error(client->socket_fd, "Neplatný token");
+                            break;
+                        }
+
+                        printf("Hráč %s se reconnectuje.", nick);
+                        if (existing_idx != client_index){
+                            clients[existing_idx].socket_fd = client_sock;
+                            clients[existing_idx].is_active = 1;
+
+                            client->socket_fd = -1;
+                            client->is_active = 0;
+
+                            client_index = existing_idx;
+                            client = &clients[client_index];
+                        } else{
+                            client->socket_fd = client_sock;
+                            client->is_active = 1;
+                        }
 
                             clients[client_index].is_connected = 1;
                             clients[client_index].last_heartbeat = time(NULL);
@@ -364,7 +368,7 @@ void* client_handler(void* arg){
                             }
                             break;
                         }
-                    }
+                    
                     
                     // NOVÝ HRÁČ
                     LOG_DEBUG("Vytvářím nového hráče '%s' na slotu %d\n", message_body, client_index);
@@ -373,11 +377,14 @@ void* client_handler(void* arg){
                     client->status = CONNECTED;
                     client->is_connected = 1;
                     client->invalid_message_count = 0;
+                    client->socket_fd = client_sock;
+                    client->player_id = client_index;
                     generate_token(client->token, 10);
                     
                     char message[40];
                     snprintf(message, sizeof(message), "Vítej ve hře!|%s", client->token);
                     send_message(client->socket_fd, OKAY, message);
+
                     LOG_INFO("Nový klient '%s' přihlášen (fd=%d, slot=%d, token=%s)\n", 
                            client->nick, client->socket_fd, client_index, client->token);
                     
@@ -474,7 +481,9 @@ void* client_handler(void* arg){
                     pthread_mutex_unlock(&clients_mutex);
                     
                     leave_room(room_id, client_index);
-                    delete_room(room_id);
+                    if(delete_room(room_id) == -1){
+                        broadcast_to_room(room_id, BOSS, "Byl jsi jmenován vlastníkem", -1);
+                    }
                     
                     pthread_mutex_lock(&clients_mutex);
                     
@@ -859,6 +868,7 @@ void* client_handler(void* arg){
                 }
                 else {
                     send_error(client->socket_fd, "Neznámý příkaz (ON_TURN)");
+                    close(client_sock);
                 }
                 break;
             }
@@ -1012,62 +1022,50 @@ void* client_handler(void* arg){
                         }
 
                     }
+                    LOG_DEBUG("ROOM DEBUG: room_id=%d status=%d player_count=%d ready_count=%d game_instance=%p",
+                            room_id,
+                            room ? room->status : -1,
+                            room ? room->player_count : -1,
+                            room ? room->ready_count : -1,
+                            room ? room->game_instance : NULL);
 
+                    for(int i = 0; i < MAX_PLAYERS_PER_ROOM; i++){
+                        int idx = room->player_indexes[i];
 
-                    /* =========================
- * DEBUG: ROOM + PLAYERS + GAME STATE
- * ========================= */
+                        if(idx == -1){
+                            LOG_DEBUG("ROOM[%d]: slot=%d EMPTY", room_id, i);
+                            continue;
+                        }
 
-LOG_DEBUG("ROOM DEBUG: room_id=%d status=%d player_count=%d ready_count=%d game_instance=%p",
-          room_id,
-          room ? room->status : -1,
-          room ? room->player_count : -1,
-          room ? room->ready_count : -1,
-          room ? room->game_instance : NULL);
+                        if(idx < 0 || idx >= MAX_CLIENTS){
+                            LOG_DEBUG("ROOM[%d]: slot=%d INVALID idx=%d", room_id, i, idx);
+                            continue;
+                        }
 
-for(int i = 0; i < MAX_PLAYERS_PER_ROOM; i++){
-    int idx = room->player_indexes[i];
+                        LOG_DEBUG(
+                            "ROOM[%d]: slot=%d idx=%d nick='%s' socket=%d connected=%d active=%d status=%d player_id=%d last_heartbeat=%ld",
+                            room_id,
+                            i,
+                            idx,
+                            clients[idx].nick,
+                            clients[idx].socket_fd,
+                            clients[idx].is_connected,
+                            clients[idx].is_active,
+                            clients[idx].status,
+                            clients[idx].player_id,
+                            clients[idx].last_heartbeat
+                        );
+                    }
 
-    if(idx == -1){
-        LOG_DEBUG("ROOM[%d]: slot=%d EMPTY", room_id, i);
-        continue;
-    }
+                    if(room && room->game_instance){
+                        GameInstance *g = (GameInstance*)room->game_instance;
 
-    if(idx < 0 || idx >= MAX_CLIENTS){
-        LOG_DEBUG("ROOM[%d]: slot=%d INVALID idx=%d", room_id, i, idx);
-        continue;
-    }
-
-    LOG_DEBUG(
-        "ROOM[%d]: slot=%d idx=%d nick='%s' socket=%d connected=%d active=%d status=%d player_id=%d last_heartbeat=%ld",
-        room_id,
-        i,
-        idx,
-        clients[idx].nick,
-        clients[idx].socket_fd,
-        clients[idx].is_connected,
-        clients[idx].is_active,
-        clients[idx].status,
-        clients[idx].player_id,
-        clients[idx].last_heartbeat
-    );
-}
-
-if(room && room->game_instance){
-    GameInstance *g = (GameInstance*)room->game_instance;
-
-    LOG_DEBUG(
-        "GAME DEBUG: current_player_index=%d state=%d",
-        g->current_player_index,
-        g->state
-    );
-}
-
-/* =========================
- * END DEBUG
- * ========================= */
-
-
+                        LOG_DEBUG(
+                            "GAME DEBUG: current_player_index=%d state=%d",
+                            g->current_player_index,
+                            g->state
+                        );
+                    }
                 } else if(strcmp(header.type_msg, PONG) == 0) {
                     // Heartbeat aktualizován
 
@@ -1090,6 +1088,9 @@ if(room && room->game_instance){
                     }
                     
                     
+                }else if(strcmp(header.type_msg, CNNT) == 0){
+                    client->status = CONNECTED;
+                    leave_room(client->current_room->room_id, client->player_id);
                 }else {
                     send_message(client->socket_fd, NOTI, "Hra skončila");
                     for(int i = 0; i < MAX_CLIENTS; i++){

@@ -6,3 +6,6 @@ build/*
 *.o
 zolik_server
 server.log
+buildCMake
+klient.log
+case_disconnected.txt

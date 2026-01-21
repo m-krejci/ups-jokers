@@ -128,6 +128,7 @@ void start_server(){
         printf("Cekam na klienta...\n");
         // cekani na socket klienta
         new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t *)&addrlen);
+        // printf("New socket: %d\n", new_socket);
         if(new_socket < 0){
             error("Chyba: accept\n");
         }

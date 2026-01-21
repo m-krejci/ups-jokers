@@ -1,0 +1,23 @@
+*****    NETCAT SERVER    *****
+nc localhost 10000      nc 192.168.208.195 10000
+JOKELOGI0004user                                        // Vytvoření profilu
+JOKERCRT0004room                                        // Vytvoření místnosti
+JOKERREDY00011                                          // Ready
+JOKERREDY0000                                           // Unready
+JOKERSTRT0000                                           // Start hry
+JOKETHRW0002xx                                          // Vyhození karty
+
+
+** RECONNECT uživatele **
+JOKELOGI00015user|                                      // Za pipe je potřeba dát přihlašovací token
+
+
+*****    NETCAT KLIENT    *****
+nc -l -p 10000                                          // Vytvoření serveru pro klienta
+JOKEOKAY0001Vítej ve hře                                // Potvrzení login požadavku
+JOKEPING0000                                            // Odeslání pingu
+JOKEOCRT00010                                           // Potvrzení místnosti + číslo místnosti
+JOKEBOSS00011                                           // Nastavení vlastníka
+JOKERINF0018mates|READY|OWNER,                          // Odpovězení požadavku RINF (Room INFo)
+JOKESTRT0005Start                                       // Start hry
+...

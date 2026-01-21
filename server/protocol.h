@@ -56,6 +56,7 @@
 #define PAUS "PAUS"
 #define RESU "RESU"
 #define RECO "RECO"
+#define CNNT "CNNT"
 
 
 #define MAX_MESSAGE_LEN 9999
@@ -109,7 +110,8 @@ static const char* const VALID_MESSAGES[] = {
     "PONG",
     "PAUS",
     "RESU",
-    "RECO"
+    "RECO",
+    "CNNT"
 };
 
 static const size_t VM_COUNT = sizeof(VALID_MESSAGES) / sizeof(VALID_MESSAGES[0]);
