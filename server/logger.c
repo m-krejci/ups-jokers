@@ -14,6 +14,7 @@ static const char *level_str[] = {
 
 int log_init(const char *filename, log_level_t min_level)
 {
+    // Pokud existuje soubor / lze vytvorit -> načti do modu append
     if (filename)
         log_file = fopen(filename, "a");
     else

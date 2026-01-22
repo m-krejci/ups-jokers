@@ -21,3 +21,12 @@ JOKEBOSS00011                                           // Nastavení vlastníka
 JOKERINF0018mates|READY|OWNER,                          // Odpovězení požadavku RINF (Room INFo)
 JOKESTRT0005Start                                       // Start hry
 ...
+
+
+
+
+1. Když je klient v místnosti a dojde k odpojení, na serveru je potřeba zajistit, aby opustil místnost, druhý hráč byl informován a klient se vrátil do lobby
+jak ze strany odpojeného, tak ze strany hráče ve hře.
+2. Kontrola přijatých zpráv teď čeká na 'J', to je špatně.
+3. Dodělat logiku když je klient v různých stavech hry.
+4. Broadcastovat změnu stavu místností -> pokud je client connected, zaslat mu RINF.

@@ -1,8 +1,18 @@
+/**
+ * @file logger.h
+ * @author Matyáš Krejčí (krejcim@students.zcu.cz)
+ * @brief Implementace loggeru pro server
+ * @version 1.0
+ * @date 2025-12-26
+ */
+
+
 #ifndef LOGGER_H
 #define LOGGER_H
 
 #include <stdio.h>
 
+// Výčtový typ levelů loggeru
 typedef enum {
     LOG_DEBUG,
     LOG_INFO,
@@ -11,17 +21,37 @@ typedef enum {
     LOG_FATAL
 } log_level_t;
 
+// Makro sloužící pro rychlý výpis do konzole
 #define DLOG(fmt, ...) \
     fprintf(stderr, "[T%lu] " fmt "\n", (unsigned long)pthread_self(), ##__VA_ARGS__)
 
+/**
+ * @brief Inicializace loggeru.
+ * @param filename Název souboru pro zápis
+ * @param min_level Minimální úroveň loggeru
+ */
 int  log_init(const char *filename, log_level_t min_level);
+
+/**
+ * @brief Funkce pro řádné uzavření souboru
+ */
 void log_close(void);
 
+/**
+ * @brief Funkce pro makra k zápisu zprávy do souboru
+ * @param level Úroveň loggovací zprávy
+ * @param file Soubor pro zápis
+ * @param line 
+ * @param fmt
+ */
 void log_msg(log_level_t level,
              const char *file,
              int line,
              const char *fmt, ...);
 
+/**
+ * @brief Vymazání obsahu souboru nad definovaným loggerem
+ */
 void log_delete(void);
 
 /* Makra – automaticky file + line */

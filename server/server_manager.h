@@ -1,14 +1,13 @@
 #ifndef SERVER_MANAGER_H
 #define SERVER_MANAGER_H
 
-#define TIMEOUT_CHECK_INTERVAL 3
+#include "config.h"
 
 /**
- * Provádí základní síťovou inicializaci
+ * @brief Provádí základní síťovou inicializaci (socket, bind, listen, accept, [send, receive], close)
+ * @param argc Počet argumentů předaných přes argc
+ * @param argv Pole argumentů z cmd
  */
-void start_server();
+void start_server(int argc, char **argv);
 
 #endif
-
-// JOKELOGI0004odoaJOKERCRT0005omghfJOKEREDY00011JOKESTRT0000JOKETHRW0002YY
-// JOKEREDY00011

@@ -10,22 +10,28 @@
  * Vstupní bod programu, startuje server.
  */
 int main(int argc, char** argv){
-    
+    // Inicializace loggeru
     log_init("server.log", LOG_DEBUG);
+
+    // Vymazání dat
     log_delete();
     LOG_INFO("Server startuje");
-    // printf("Starting JOKERS! server...\n");
 
+    // Základní inicializace klientů, místností a hry
     initialize_clients();
     initialize_rooms();
     game_init();
 
-    start_server();
+    // Start serveru
+    start_server(argc, argv);
 
+    // Řádné uzavření souboru
     LOG_INFO("Server se ukončuje");
     log_close();
 
-
-
     return 0;
 }
+
+// ================== SPUŠTĚNÍ ==================
+// ./zolik_server <adresa:Optional> <port:Optional>
+// ==============================================

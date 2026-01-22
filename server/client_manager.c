@@ -365,10 +365,10 @@ void* client_handler(void* arg){
                     int existing_idx = find_player_by_nick(nick);
 
                     DLOG("RECO CHECK nick='%s' token_recv='%s' token_ctx='%s' has_token=%d existing_idx=%d existing_is_conn=%d existing_fd=%d",
-     nick, token, (existing_idx>=0 ? clients[existing_idx].token : "-"),
-     has_token, existing_idx,
-     existing_idx>=0 ? clients[existing_idx].is_connected : -1,
-     existing_idx>=0 ? clients[existing_idx].socket_fd : -1);
+                    nick, token, (existing_idx>=0 ? clients[existing_idx].token : "-"),
+                    has_token, existing_idx,
+                    existing_idx>=0 ? clients[existing_idx].is_connected : -1,
+                    existing_idx>=0 ? clients[existing_idx].socket_fd : -1);
 
 
                     
@@ -380,8 +380,8 @@ void* client_handler(void* arg){
                             break;
                         }
                         DLOG("RECO TOKEN CMP idx=%d recv='%s' ctx='%s' strcmp=%d",
-     existing_idx, token, clients[existing_idx].token,
-     strcmp(clients[existing_idx].token, token));
+                        existing_idx, token, clients[existing_idx].token,
+                        strcmp(clients[existing_idx].token, token));
 
                         if (strcmp(clients[existing_idx].token, token) != 0){
                             send_error(client->socket_fd, "Neplatný token");
@@ -391,7 +391,7 @@ void* client_handler(void* arg){
                         // printf("Hráč %s se reconnectuje.", nick);
                         if (existing_idx != client_index){
                             DLOG("RECO SWAP newfd=%d -> idx=%d (oldfd=%d)",
-     client_sock, existing_idx, clients[existing_idx].socket_fd);
+                            client_sock, existing_idx, clients[existing_idx].socket_fd);
 
                             clients[existing_idx].socket_fd = client_sock;
                             clients[existing_idx].is_active = 1;
@@ -417,37 +417,30 @@ void* client_handler(void* arg){
                             switch(client->last_status){
                                 case CONNECTED:
                                     send_message(client->socket_fd, OKAY, "LOBBY");
-                                    // printf("1\n");
                                     break;
                                 
                                 case IN_ROOM:
                                     send_message(client->socket_fd, OKAY, "LOBBY");
-                                    // printf("2\n");
                                     break;
 
                                 case ON_TURN:
                                     send_message(client->socket_fd, OKAY, "TURN");
-                                    // printf("3\n");
                                     break;
                                 
                                 case ON_WAIT:
                                     send_message(client->socket_fd, OKAY, "WAIT");
-                                    // printf("4\n");
                                     break;
 
                                 case GAME_DONE:
                                     send_message(client->socket_fd, OKAY, "LOBBY");
-                                    // printf("5\n");
                                     break;
 
                                 case PAUSED:
                                     send_message(client->socket_fd, OKAY, "PAUSED");
-                                    // printf("6\n");
                                     break;
                                 
                                 default:
                                     send_message(client->socket_fd, OKAY, "LOBBY");
-                                    // printf("7\n");
                                     break;
                         }
                             LOG_INFO("Reconnect úspesny");
@@ -478,9 +471,6 @@ void* client_handler(void* arg){
 
                                 if (game) {
                                     char full_state[4096];
-
-                                    // clients[client_index].status = ;
-
                                     if (game_get_full_state(game, client_index,
                                                             full_state, sizeof(full_state)) > 0) {
                                         send_message(clients[client_index].socket_fd,
@@ -488,6 +478,9 @@ void* client_handler(void* arg){
                                     }
 
                                     broadcast_to_room(room_id, RESU, "Hráč se vrátil do hry, obnovuji hru", -1);
+                                } else{
+                                    printf("Jop byl jenom v místnosti\n");
+                                    client->status = CONNECTED;
                                 }
                             }
                             break;
@@ -715,10 +708,12 @@ void* client_handler(void* arg){
                     }
                     
                 } else if(strcmp(header.type_msg, QUIT) == 0) {
+                    leave_room(room_id, client->player_id);
                     delete_room(room_id);
                     should_disconnect = 1;
                     
                 } else {
+                    send_error(client_sock, "Nejsi v místnosti");
                     close(client_sock);
                 }
                 break;
@@ -1274,8 +1269,8 @@ void* client_handler(void* arg){
     client->status = DISCONNECTED;
 
     // DEBUG: Výpis stavu po odpojení
-    LOG_DEBUG("  -> Po odpojení: nick='%s', socket_fd=%d, is_connected=%d, disconnect_time=%ld, status=%d\n",
-           client->nick, client->socket_fd, client->is_connected, client->disconnect_time, client->status);
+    LOG_DEBUG("  -> Po odpojení: nick='%s', socket_fd=%d, is_connected=%d, disconnect_time=%ld, status=%d, last_status=%d\n",
+           client->nick, client->socket_fd, client->is_connected, client->disconnect_time, client->status, client->last_status);
 
     // PONECHÁME: nick, player_id, status, current_room pro reconnect!
     
