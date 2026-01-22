@@ -128,6 +128,7 @@ void start_server(){
         printf("Cekam na klienta...\n");
         // cekani na socket klienta
         new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t *)&addrlen);
+        DLOG("ACCEPT fd=%d", new_socket);
         // printf("New socket: %d\n", new_socket);
         if(new_socket < 0){
             error("Chyba: accept\n");
@@ -154,6 +155,9 @@ void start_server(){
             ThreadContext *context = (ThreadContext*)malloc(sizeof(ThreadContext));
             context->socket_fd = new_socket;
             context->client_index = client_index;
+
+            DLOG("ASSIGN slot=%d fd=%d", client_index, new_socket);
+
 
             pthread_t client_thread;
 
