@@ -11,6 +11,9 @@ typedef enum {
     LOG_FATAL
 } log_level_t;
 
+#define DLOG(fmt, ...) \
+    fprintf(stderr, "[T%lu] " fmt "\n", (unsigned long)pthread_self(), ##__VA_ARGS__)
+
 int  log_init(const char *filename, log_level_t min_level);
 void log_close(void);
 

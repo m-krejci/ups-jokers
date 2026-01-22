@@ -57,26 +57,12 @@ void initialize_clients();
  */
 void remove_client(int client_socket);
 
-/**
- * @brief Pošle zprávu všem uživatelům, připojených k serveru. Může sloužit například k údržbě serveru, kdy
- * všichni hráči obdrží zprávu o jeho vypnutí.
- * @param type_msg Typ zprávy (většinou NOTI), dle definice protokolu
- * @param message Zpráva zobrazovaná v konzoli klienta
- */
-void broadcast(const char* type_msg, const char* message);
 
 /**
  * @brief Mozek serveru, člení herní status klienta, kontroluje zprávy a podle nich odesílá instrukce
  * @param arg Obsahuje context klienta pro klientské vlákno (socket a index)
  */
 void *client_handler(void* arg);
-
-/**
- * @brief Odpojení klienta při buďto opakovaném přijímání nevalidních zpráv nebo z pádného důvodu
- * @param client_index 
- * @param reason
- */
-void disconnect_critical(int client_index, const char* reason);
 
 /**
  * 
