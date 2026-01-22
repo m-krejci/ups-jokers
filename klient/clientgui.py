@@ -433,7 +433,7 @@ class ClientGUI:
                             else:
                                 self.game_state = GameState.CONNECTED
 
-                            self.game_state = GameState.CONNECTED
+                            
                             
                             splitted = message.split("|")
                             if len(splitted) == 2:
@@ -513,6 +513,19 @@ class ClientGUI:
 
                         if type_msg == Message_types.OKAY.value:
                             self.game_console.log(message, False)
+                            self.waiting_for_login_response = False
+                            if message == "LOBBY":
+                                self.game_state = GameState.CONNECTED
+                            elif message == "TURN":
+                                self.game_on_turn = True
+                                self.game_state = GameState.IN_GAME
+                            elif message == "WAIT":
+                                self.game_on_turn = False
+                                self.game_state = GameState.IN_GAME
+                            elif message == "PAUSED":
+                                pass
+                            else:
+                                self.game_state = GameState.CONNECTED
 
                         elif type_msg == Message_types.STAT.value:
                             zprava = message.split("|")
