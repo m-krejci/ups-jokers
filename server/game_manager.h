@@ -15,6 +15,7 @@
 typedef struct GameRoom GameRoom;
 struct ClientContext;
 
+// Enum pro stavy hry
 typedef enum{
     GAME_STATE_LOBBY,
     GAME_STATE_STARTING,
@@ -23,6 +24,7 @@ typedef enum{
     GAME_STATE_FINISHED
 } GameState;
 
+// Struktura pro uchování karty
 typedef struct {
     int id;
     char name[2];
@@ -32,12 +34,14 @@ typedef struct {
     char code[3];
 } Card;
 
+// Struktura pro uchování postupek a setů (vyložených karet)
 typedef struct {
     Card cards[MAX_SEQUENCE_CARDS];
     int count;
     int owner_client_index;
 } CardSequence;
 
+// Struktura pro uchování herního stavu uživatele
 typedef struct {
     int client_index;
     int score;
@@ -58,6 +62,7 @@ typedef struct {
     int did_closed;
 } PlayerGameState;
 
+// Struktura hry
 typedef struct{
     int room_id;
     GameState state;
@@ -82,6 +87,7 @@ typedef struct{
     void* event_log;
 } GameInstance;
 
+// Callbacky nevyužity 
 typedef void (*SendToPlayerCallback)(int client_index, const char* msg_type, const char *message);
 typedef void (*BroadcastToRoomCallback)(int room_id, const char* msg_type, const char* message, int except_index);
 typedef void (*NotifyRoomCallback)(int room_id, const char* event_type, const char* data);
@@ -92,46 +98,160 @@ typedef struct{
     NotifyRoomCallback notify_room;
 } GameCallbacks;
 
+/**
+ * @brief Základní inicializace aktivních her
+ */
 void game_init();
 
+/**
+ * @brief Vytvoření hry v místnosti
+ * @param room Instance místnosti
+ * @return Instance na hru
+ */
 GameInstance* game_create(GameRoom *room);
 
+/**
+ * @brief Odstranění hry
+ * @param game Instance odstraňované hry
+ */
 void game_destroy(GameInstance *game);
 
+/**
+ * @brief 
+ * @param game
+ * @return
+ */
 int game_start(GameInstance *game);
 
+/**
+ * @brief
+ * @param game
+ * @param client_index
+ * @param action
+ * @param message_body
+ * @return
+ */
 int game_process_move(GameInstance *game, int client_index, const char* action, const char* message_body);
 
+/**
+ * @brief
+ * @param game
+ * @return
+ */
 int game_end_round(GameInstance *game);
 
+/**
+ * @brief
+ * @param
+ * @return
+ */
 int game_end(GameInstance *game);
 
+/**
+ * @brief
+ * @param
+ * @param
+ * @return
+ */
 int game_pause(GameInstance *game, const char* reason);
 
+/**
+ * @brief
+ * @param
+ * @return
+ */
 int game_resume(GameInstance *game);
 
+/**
+ * @brief
+ * @param
+ * @param
+ * @param
+ * @param
+ * @return
+ */
 int game_get_player_cards(GameInstance *game, int client_index, char* buffer, size_t buffer_size);
 
+/**
+ * @brief
+ * @param
+ * @param
+ * @param
+ * @param
+ * @return
+ */
 int game_get_player_state(GameInstance *game, int client_index, char* buffer, size_t buffer_size);
 
+/**
+ * @brief
+ * @param
+ * @param
+ * @param
+ * @param
+ * @return
+ */
 int game_get_full_state(GameInstance *game, int client_index, char *buffer, size_t buffer_size);
 
+/**
+ * @brief
+ * @param
+ * @param
+ * @param
+ * @return
+ */
 int game_validate_move(GameInstance *game, int client_index, const char* action);
 
+/**
+ * @brief
+ * @param
+ * @return
+ */
 int game_check_timeout(GameInstance *game);
 
+/**
+ * @brief
+ * @param
+ * @param
+ * @return
+ */
 int game_disconnect_handle(GameInstance *game, int client_index);
 
+/**
+ * @brief
+ * @param
+ * @param
+ * @return
+ */
 int game_reconnect_handle(GameInstance *game, int client_index);
 
+/**
+ * @brief
+ * @param
+ */
 void game_init_deck(GameInstance *game);
 
+/**
+ * @brief
+ * @param
+ */
 void game_deal_cards(GameInstance *game);
 
+/**
+ * @brief
+ * @param
+ */
 void game_next_player(GameInstance *game);
 
+/**
+ * @brief
+ * @param
+ */
 void game_calculate_scores(GameInstance *game);
 
+/**
+ * @brief
+ * @param
+ */
 int game_is_finished(GameInstance *game);
 
 #endif

@@ -47,7 +47,7 @@ extern ClientContext clients[MAX_CLIENTS];
 extern pthread_mutex_t clients_mutex;
 
 /**
- * Inicializace pole klientů, provede základní nastavení pole, může mít nekonečněkrát modifikováno
+ * @brief Inicializace pole klientů, provede základní nastavení pole, může mít nekonečněkrát modifikováno
  */
 void initialize_clients();
 
@@ -65,10 +65,15 @@ void remove_client(int client_socket);
 void *client_handler(void* arg);
 
 /**
- * 
+ * @brief Hledá hráče v poli všech hráčů na základě nicku
+ * @param nick Přezdívka uživatele
+ * @return
  */
 int find_player_by_nick(const char* nick);
 
+/**
+ * @brief 
+ */
 void check_client_timeouts();
 
 #endif 

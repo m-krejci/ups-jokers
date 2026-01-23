@@ -61,6 +61,21 @@ int find_player_by_nick(const char* nick){
     return -1;
 }
 
+void broadcast(const char *type_msg, const char *msg){
+    for(int i = 0; i < MAX_CLIENTS; i++){
+        if(clients[i].socket_fd >= 0 && clients[i].status == CONNECTED){
+            if(strcmp(type_msg, RLIS) == 0){
+                char room_list[4096];
+                int count = get_room_list(room_list, sizeof(room_list));
+
+                if(count > 0){
+                    send_message(clients[i].socket_fd, type_msg, room_list);
+                }
+            }
+        }   
+    }
+}
+
 void check_client_timeouts(){
     time_t now = time(NULL);
 
@@ -556,6 +571,10 @@ void* client_handler(void* arg){
                         
                         send_message(client->socket_fd, OCRT, room_id_str);
                         send_message(client->socket_fd, BOSS, "1");
+
+                        pthread_mutex_unlock(&clients_mutex);
+                        broadcast(RLIS, "");
+                        pthread_mutex_lock(&clients_mutex);
                     } else{
                         send_message(client->socket_fd, ECRT, "Nelze vytvořit");
                     }
