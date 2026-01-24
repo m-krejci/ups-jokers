@@ -655,6 +655,10 @@ int game_process_move(GameInstance *game, int client_index, const char* action, 
     }
     if (card_in_hand_idx == -1) return -1; // Karta není v ruce
 
+    if(player->hand_count == 1){
+        return -1;
+    }
+
     // 2. Najití cílové sekvence v game->sequences
     CardSequence *target_seq = NULL;
     for (int i = 0; i < game->sequence_count; i++) {

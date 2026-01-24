@@ -665,6 +665,9 @@ class ClientGUI:
                         if type_msg == Message_types.WAIT.value:
                             self.game_on_turn = False
                             self.game_console.log(message, False)
+
+                        elif self.game_state == Message_types.LBBY.value:
+                            self.game_state = GameState.CONNECTED
                         
                         elif type_msg == Message_types.TURN.value:
                             self.game_on_turn = True

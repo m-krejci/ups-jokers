@@ -1234,6 +1234,7 @@ void* client_handler(void* arg){
                 }else if(strcmp(header.type_msg, CNNT) == 0){
                     client->status = CONNECTED;
                     leave_room(client->current_room->room_id, client->player_id);
+                    send_message(client->socket_fd, LBBY, "Dohrál jsi");
                 }else {
                     send_message(client->socket_fd, NOTI, "Hra skončila");
                     for(int i = 0; i < MAX_CLIENTS; i++){
