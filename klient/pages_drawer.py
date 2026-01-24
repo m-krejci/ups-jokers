@@ -101,6 +101,9 @@ class PageDrawer:
         text = self.font.render(state.create_room_text, True, (0, 0, 0))
         self.screen.blit(text, (state.popup_input_rect.x + 8, state.popup_input_rect.y + 8))
 
+        sym_range = self.font.render("[a-z, A-Z, 0-9]", True, (120, 120, 120))
+        self.screen.blit(sym_range, (state.popup_rect.x + 140, state.popup_rect.y + 120))
+
         hint = self.font.render("ENTER = potvrdit | ESC = zrušit", True, (120, 120, 120))
         self.screen.blit(hint, (state.popup_rect.x + 60, state.popup_rect.y + 160))
 

@@ -196,6 +196,7 @@ class ClientGUI:
             self.network_thread.start()
             if self.token:
                 self.send_message(Message_types.LOGI.value, f"{self.login_text}|{self.token}")
+                
             else:    
                 self.send_message(Message_types.LOGI.value, self.login_text)
             
@@ -438,6 +439,7 @@ class ClientGUI:
                             splitted = message.split("|")
                             if len(splitted) == 2:
                                 self.token = splitted[1].strip()
+                                print("NEEEEEW TOKEEEEEN: ", self.token)
                                 self.game_console.log(splitted[0], False)
                             else:
                                 self.game_console.log(message, False)
@@ -825,12 +827,28 @@ class ClientGUI:
         if processed_count > 0:
             log_msg(INFO, f"[GUI] Zpracováno {processed_count} zpráv")
 
+    def check_nickname(self, nick):
+        charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
+        for i in range(len(nick)):
+            if nick[i] not in charset:
+                return nick[i]
+        
+        return True
+
+
     def try_connect(self):
         if not self.login_text.strip():
             self.login_error = "Nickname nesmí být prázdný"
             return
         
         self.login_error = ""
+        """
+        Funkce zkontroluje jmeno na znaky a vrati symbol, ktery se tomu nelibi.
+        """
+        m= self.check_nickname(self.login_text.strip())
+        if not self.check_nickname(self.login_text.strip()) == True:
+            self.login_error = f"Zakázaný znak [{m}]"
+            return
 
         if not self.server_text.strip():
             self.server_error = "Server nesmí zůstat prázdný"
@@ -924,6 +942,14 @@ class ClientGUI:
         
         return "".join(result)
 
+    def check_room_name(self, create_room_text):
+        charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890"
+        for i in range(len(create_room_text)):
+            if create_room_text[i] not in charset:
+                return create_room_text[i]
+        
+        return True
+
     def handle_event(self, event):
         if event.type == pygame.QUIT:
             self.running = False
@@ -936,6 +962,11 @@ class ClientGUI:
                     return
                 elif event.key == pygame.K_RETURN:
                     if self.create_room_text.strip():
+                        m = self.check_room_name(self.create_room_text)
+                        if not m == True:
+                            self.game_console.log(f"Zakázaný symbol '{m}'", True)
+                            # self.show_create_room_popup = False
+                            return
                         self.send_message(Message_types.RCRT.value, self.create_room_text)
                     self.show_create_room_popup = False
                     return
