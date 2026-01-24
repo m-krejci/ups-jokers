@@ -37,7 +37,7 @@
 // Maximální počet disconnectů
 #define MAX_DISCONNECT_COUNT 3
 // Definice délky tokenu pro reconnect
-#define TOKEN_LEN 10
+#define TOKEN_LEN 3
 // Definice počtu přijatelných argumentů z cmd line
 #define ARGUMENT_COUNT 3
 // ______________________________

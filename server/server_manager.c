@@ -192,7 +192,7 @@ void start_server(int argc, char **argv){
 
         int client_index = -1; // Nastav na "neplatný" index
         for(int i = 0; i < MAX_CLIENTS; i++){
-            if(clients[i].socket_fd == -1){
+            if(clients[i].socket_fd == -1 && clients[i].nick[0] == '\0'){
                 client_index = i;
                 break; // Místo nalezeno
             }

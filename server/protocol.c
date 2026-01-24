@@ -82,6 +82,7 @@ int read_full_message(int client_sock, ProtocolHeader* header_out, char** messag
     char len_str[LENGTH_LEN + 1];
     int message_len;
     char c;
+    int errr = 0;
 
     while(1){
         ssize_t r = recv(client_sock, &c, 1, 0);
@@ -89,6 +90,9 @@ int read_full_message(int client_sock, ProtocolHeader* header_out, char** messag
         if(c == 'J'){
             header_buffer[0] = 'J';
             break;
+        }
+        if(++errr > 1){
+            return -1;
         }
     }
 

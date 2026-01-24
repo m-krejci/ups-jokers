@@ -23,6 +23,14 @@ JOKESTRT0005Start                                       // Start hry
 ...
 
 
+**** dev/urandom ****
+cat /dev/urandom | nc -l 127.0.0.1 -p 10000         // Server, co naslouchá a posílá náhodná data
+cat /dev/urandom | nc 127.0.0.1 10000               // Klient, co se připojí a produkuje náhodná data
+
+
+**** VALGRIND ****
+valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./zolik_server
+
 
 
 1. Když je klient v místnosti a dojde k odpojení, na serveru je potřeba zajistit, aby opustil místnost, druhý hráč byl informován a klient se vrátil do lobby 482
@@ -31,5 +39,22 @@ jak ze strany odpojeného, tak ze strany hráče ve hře.
 3. Dodělat logiku když je klient v různých stavech hry.
 4. Broadcastovat změnu stavu místností -> pokud je client connected, zaslat mu RINF.
 5. Když se dohraje hra, oba jdou do lobby a vytvori novou hru, ten co neni na tahu nema dobre aktualizovany gamestate (nevidi karty protihrace)
-6. Diakritika a specialni symboly
+
 7. V broadcastu přistupuju ke klientům bez mutexu
+8. Když chce uživatel hrát znovu -> vypsat konzoli.
+9. Reconnect tokeny? Navrhnout jinou architekturu.
+10. Pokud aplikace hráči spadne -> asi by bylo vhodné i token uložit do separátního souboru. Potom by se v aplikaci testovalo, jestli je token jako lokální proměnná
+nastaven -> pokud ne, podívám se do souboru a pokud není prázdný, zkusím poslat login|token. Pokud je prázdný, jsem nový uživatel a posílám pouze login. 
+Problém je mazání tokenu, protože tam bude i déle. Možná by do souboru šel přidat timestamp -> který pokud je větší než 2 minuty než teď nepoužije token a smaže 
+ho ze souboru?
+11. Server při dlouhodobém reconnectu nekontroluje dvě minuty (je to více) -- respektive ano, ale špatně -> vezme reconnect od klienta i s tokenem a uloží
+ho jako nick -> špatně. Musí to ostripovat -> server přijme NOVÉHO KLIENTA!!! -> Upravit logiku pro nového klienta -> Oddělit si jméno od tokenu, zaslat nový token,
+který si klient přepíše
+12. Vytvořit cleaning funkci na SIGINT.
+
+
+Funkční verze pro reconnect 0e7b8b21. (git log -1)
+
+
+DONE:
+6. Diakritika a specialni symboly -- UTF-8

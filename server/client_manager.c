@@ -124,7 +124,8 @@ void check_client_timeouts(){
 
     if (room) {
         // broadcast mimo clients_mutex (jak už děláš)
-        broadcast_to_room(room->room_id, PAUS, "Protihráč se odpojil", -1);
+        broadcast_to_room(room->room_id, LBBY, "Protihráč se odpojil", -1);
+        // leave_room(room->room_id, clients[i].player_id);
 
         // pokud game_pause není thread-safe vůči dalším akcím, řeš to vlastním mutexem hry/room
         if (room->game_instance) {
@@ -174,6 +175,7 @@ void check_client_timeouts(){
                 clients[i].socket_fd = -1;
                 clients[i].player_id = -1;
                 clients[i].status = DISCONNECTED;
+                clients[i].nick[0] = '\0'; 
             }
         }
     }
@@ -182,7 +184,8 @@ void check_client_timeouts(){
 
 void generate_token(char *token, int length) {
     // Definice povolených znaků (abeceda pro token)
-    const char charset[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    // const char charset[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    const char charset[] = "abcdefghijklmnopqrstuvwxyz";
     int charset_size = sizeof(charset) - 1;
 
     for (int i = 0; i < length; i++) {
@@ -358,8 +361,8 @@ void* client_handler(void* arg){
                         token[TOKEN_LEN] = '\0';
 
                         has_token = 1;
-                        // printf("Reconnect pokus: nick=%s, token=%s\n", nick, token);
-                        // printf("Pokus o reconnect.\n");
+                        printf("Reconnect pokus: nick=%s, token=%s\n", nick, token);
+                        printf("Pokus o reconnect.\n");
                     }
                     else{
                         size_t nick_len = strlen(message_body);
@@ -371,7 +374,7 @@ void* client_handler(void* arg){
                         strncpy(nick, message_body, NICK_LEN);
                         nick[NICK_LEN] = '\0';
 
-                        // printf("Nové připojení: nick=%s\n", nick);
+                        printf("Nové připojení: nick=%s\n", nick);
                     }
                 
                     DLOG("LOGI recv slot=%d fd=%d body='%s'", client_index, client_sock, message_body);
@@ -503,7 +506,7 @@ void* client_handler(void* arg){
                     
                     
                     // NOVÝ HRÁČ
-                    LOG_DEBUG("Vytvářím nového hráče '%s' na slotu %d\n", message_body, client_index);
+                    LOG_DEBUG("Vytvářím nového hráče '%s' na slotu %d\n", nick, client_index);
                     strncpy(client->nick, message_body, NICK_LEN);
                     client->nick[NICK_LEN] = '\0';
                     client->status = CONNECTED;
@@ -511,7 +514,7 @@ void* client_handler(void* arg){
                     client->invalid_message_count = 0;
                     client->socket_fd = client_sock;
                     client->player_id = client_index;
-                    generate_token(client->token, 10);
+                    generate_token(client->token, TOKEN_LEN); 
                     
                     char message[40];
                     snprintf(message, sizeof(message), "Vítej ve hře!|%s", client->token);
