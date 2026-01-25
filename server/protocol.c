@@ -1,5 +1,6 @@
 #include "protocol.h"
 #include "logger.h"
+#include "config.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <unistd.h>
@@ -82,78 +83,69 @@ int read_full_message(int client_sock, ProtocolHeader* header_out, char** messag
     char len_str[LENGTH_LEN + 1];
     int message_len;
     char c;
-    int errr = 0;
 
-    while(1){
+    // const char *MAG = "JOKE";
+    char win[MAGIC_LEN] = {0};
+    int filled = 0;
+
+    int garbage = 0;
+
+    // najdi MAGIC "JOKE"
+    while (1) {
         ssize_t r = recv(client_sock, &c, 1, 0);
-        if(r <= 0) return -1;
-        if(c == 'J'){
-            header_buffer[0] = 'J';
+        if (r <= 0) return -1;
+
+        if (filled < MAGIC_LEN) win[filled++] = c;
+        else {
+            memmove(win, win + 1, MAGIC_LEN - 1);
+            win[MAGIC_LEN - 1] = c;
+        }
+
+        if (filled == MAGIC_LEN && memcmp(win, MAGIC, MAGIC_LEN) == 0) {
+            memcpy(header_buffer, MAGIC, MAGIC_LEN);
             break;
         }
-        if(++errr > 1){
-            return -1;
+
+        if (++garbage >= MAX_GARBAGE){
+            send_error(client_sock, "Invalid data");
+             return -2; // moc bordelu
         }
     }
 
-    // přečtení hlavičky
-    if(custom_receive(client_sock, header_buffer + 1, HEADER_LEN - 1) != HEADER_LEN - 1){
-        // printf("Chyba: došlo k chybě při čtení hlavičky\n");
-        return -1;
-    }
+    // dočti zbytek hlavičky po MAGIC
+    int rest = HEADER_LEN - MAGIC_LEN;
+    if (custom_receive(client_sock, header_buffer + MAGIC_LEN, rest) != rest) return -1;
+    header_buffer[HEADER_LEN] = '\0';
 
-    // ********** ROZPARSOVÁNÍ HLAVIČKY **********
-    // magic
+    // parse hlavičky (tohle máš OK)
     strncpy(header_out->magic, header_buffer, MAGIC_LEN);
     header_out->magic[MAGIC_LEN] = '\0';
 
-    // message type
     strncpy(header_out->type_msg, header_buffer + MAGIC_LEN, MSG_TYPE_LEN);
     header_out->type_msg[MSG_TYPE_LEN] = '\0';
 
-    // length (ASCII text z Python klienta)
     strncpy(len_str, header_buffer + MAGIC_LEN + MSG_TYPE_LEN, LENGTH_LEN);
     len_str[LENGTH_LEN] = '\0';
 
-    // 1. test: Kontrola, jestli je magic korektní
-    if(strcmp(header_out->magic, "JOKE") != 0){
-        send_error(client_sock, "Chyba: Špatný magic");
-        LOG_ERROR("Chyba: Špatný magic: %s\n", header_out->magic);
-        return -2;
-    }
+    if (strcmp(header_out->magic, MAGIC) != 0) return -2;
+    if (!validate_message(header_out->type_msg)) return -3;
+    if (!validate_message_len(len_str)) return -4;
 
-    // 2. test: Kontrola, zda-li existuje přijatá zpráva v množině akceptovaných zpráv
-    if(!validate_message(header_out->type_msg)){
-        send_message(client_sock, ERRR, "Chyba: Neznámá zpráva");
-        LOG_ERROR("Chyba: Neznámá zpráva: %s\n", header_out->type_msg);
-        return -3;
-    }
-
-    // 3. test: Kontrola, jestli formát délky zprávy je korektní (ASCII čísla)
-    if(!validate_message_len(len_str)){
-        send_error(client_sock, "Chyba: Nesprávný formát délky zprávy");
-        LOG_ERROR("Chyba: Nesprávný formát délky zprávy %s\n", len_str);  // ********** OPRAVENO: místo header_out->message_len **********
-        return -4;
-    }
-
-    message_len = atoi(len_str);  
+    message_len = atoi(len_str);
     header_out->message_len = message_len;
 
-    *message_out = (char *)malloc(message_len + 1);
-    if(!*message_out){
-        return -5;
-    }
+    *message_out = malloc(message_len + 1);
+    if (!*message_out) return -5;
 
-    // dopřečti zbytek zprávy
-    if(custom_receive(client_sock, *message_out, message_len) != message_len){
+    if (custom_receive(client_sock, *message_out, message_len) != message_len) {
         free(*message_out);
         *message_out = NULL;
         return -6;
     }
-
     (*message_out)[message_len] = '\0';
     return 0;
 }
+
 
 
 int send_message(int client_sock, const char* type_msg, const char* message){

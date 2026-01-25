@@ -1,0 +1,1 @@
+Tato složka uchovává kódy, které dřív byly použity, byly odebrány, ale mohly by být opětovně aplikovány.

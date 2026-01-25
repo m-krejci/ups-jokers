@@ -106,7 +106,7 @@ void game_init();
 /**
  * @brief Vytvoření hry v místnosti
  * @param room Instance místnosti
- * @return Instance na hru
+ * @return Instance na hru, NULL
  */
 GameInstance* game_create(GameRoom *room);
 
@@ -117,19 +117,19 @@ GameInstance* game_create(GameRoom *room);
 void game_destroy(GameInstance *game);
 
 /**
- * @brief 
- * @param game
- * @return
+ * @brief Spustí hru v místnosti, pokud je to možné
+ * @param game Instance na hru
+ * @return -1: ERROR, 0: SUCCESS
  */
 int game_start(GameInstance *game);
 
 /**
- * @brief
- * @param game
- * @param client_index
- * @param action
- * @param message_body
- * @return
+ * @brief Kontroluje, jestli tah hráčem je validní
+ * @param game Instance na hru
+ * @param client_index Klientský index
+ * @param action Vykonávaná akce
+ * @param message_body Tělo akce (karty)
+ * @return <0: ERROR, 0: validní tah
  */
 int game_process_move(GameInstance *game, int client_index, const char* action, const char* message_body);
 
@@ -141,116 +141,116 @@ int game_process_move(GameInstance *game, int client_index, const char* action, 
 int game_end_round(GameInstance *game);
 
 /**
- * @brief
- * @param
- * @return
+ * @brief Ukončuje násilně hru (pro budoucí implementaci)
+ * @param game Instace na hru
+ * @return 0
  */
 int game_end(GameInstance *game);
 
 /**
- * @brief
- * @param
- * @param
- * @return
+ * @brief V případě výpadku jednoho z klientů pozastavuje hru
+ * @param game Instance hry
+ * @param reason Důvod pozastavení
+ * @return -1: ERROR, 0: SUCCESS
  */
 int game_pause(GameInstance *game, const char* reason);
 
 /**
- * @brief
- * @param
- * @return
+ * @brief Obnovuje hru při připojení klienta zpět do hry
+ * @param game Instance na hru
+ * @return -1: ERROR, 0: SUCCESS
  */
 int game_resume(GameInstance *game);
 
 /**
- * @brief
- * @param
- * @param
- * @param
- * @param
- * @return
+ * @brief Ze struktury načte řetězec karet hráče do bufferu
+ * @param game Instance hry
+ * @param client_index Klientský index (hráč)
+ * @param buffer Buffer pro zprávu
+ * @param buffer_size Velikost bufferu
+ * @return -1: ERROR, int: Počet zapsaných znaků: SUCCESS
  */
 int game_get_player_cards(GameInstance *game, int client_index, char* buffer, size_t buffer_size);
 
 /**
- * @brief
- * @param
- * @param
- * @param
- * @param
- * @return
+ * @brief Vrací state hráče
+ * @param game Instance na hru
+ * @param client_index Klientský index (hráč)
+ * @param buffer Buffer pro state
+ * @param buffer_size Velikost bufferu
+ * @return -1: ERROR, 1: SUCCESS
  */
 int game_get_player_state(GameInstance *game, int client_index, char* buffer, size_t buffer_size);
 
 /**
- * @brief
- * @param
- * @param
- * @param
- * @param
- * @return
+ * @brief Formátuje stav hry pro klienty a předává informace o kartách v ruce, vyhozené kartě, počet karet protihráče a tah nebo opak
+ * @param game Instance hry
+ * @param client_index Klientský index (hráč)
+ * @param buffer Buffer pro zprávu (řetězec)
+ * @param buffer_size Velikost bufferu
+ * @return -1: ERROR, int: Velikost zprávy: SUCCESS
  */
 int game_get_full_state(GameInstance *game, int client_index, char *buffer, size_t buffer_size);
 
 /**
- * @brief
- * @param
- * @param
- * @param
- * @return
+ * @brief Původně funkce pro demodulaci funkce process_move (pro budoucí užití)
+ * @param game Instance hry
+ * @param client_index Klientský index
+ * @param action Tah hry
+ * @return 0
  */
 int game_validate_move(GameInstance *game, int client_index, const char* action);
 
 /**
- * @brief
- * @param
- * @return
+ * @brief Funkce pro budoucí implementaci
+ * @param game Instance na hru
+ * @return 0
  */
 int game_check_timeout(GameInstance *game);
 
 /**
- * @brief
- * @param
- * @param
- * @return
+ * @brief Pro budoucí implementaci
+ * @param game Instance na hru
+ * @param client_index Klientský index
+ * @return 0
  */
 int game_disconnect_handle(GameInstance *game, int client_index);
 
 /**
- * @brief
- * @param
- * @param
- * @return
+ * @brief Navrácení hráče do hry po reconnectu
+ * @param game Instance na hru
+ * @param client_index Klientský index
+ * @return -1: ERROR, 0: SUCCESS
  */
 int game_reconnect_handle(GameInstance *game, int client_index);
 
 /**
- * @brief
- * @param
+ * @brief Inicializace hrního balíčku, zamíchání karet
+ * @param game Instance na hru
  */
 void game_init_deck(GameInstance *game);
 
 /**
- * @brief
- * @param
+ * @brief Rozdání karet uživatelům
+ * @param game Instance na hru
  */
 void game_deal_cards(GameInstance *game);
 
 /**
- * @brief
- * @param
+ * @brief Přepnutí hráče na tahu
+ * @param game Instance na hru
  */
 void game_next_player(GameInstance *game);
 
 /**
- * @brief
- * @param
+ * @brief Výpočet skore zbylých karet v rukách hráčů
+ * @param game Instance na hru
  */
 void game_calculate_scores(GameInstance *game);
 
 /**
- * @brief
- * @param
+ * @brief Kontrola ukončení hry
+ * @param game Instance na hru
  */
 int game_is_finished(GameInstance *game);
 

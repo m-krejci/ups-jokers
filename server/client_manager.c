@@ -53,7 +53,6 @@ void remove_client(int client_socket){
 int find_player_by_nick(const char* nick){
     for(int i = 0; i < MAX_CLIENTS; i++){
         if(clients[i].nick[0] != '\0' && strcmp(clients[i].nick, nick) == 0){
-            // printf("%d\n",clients[i].socket_fd);
             return i;
         }
     }
@@ -93,41 +92,32 @@ void check_client_timeouts(){
             if (now - clients[i].last_heartbeat > HEARTBEAT_TIMEOUT) {
     LOG_INFO("Klient '%s' timeout (heartbeat) - odpojuji \n", clients[i].nick);
 
-    DLOG("HB TIMEOUT idx=%d nick='%s' fd=%d is_conn=%d last_hb=%ld now=%ld",
-         i, clients[i].nick, clients[i].socket_fd, clients[i].is_connected,
-         (long)clients[i].last_heartbeat, (long)now);
+    // DLOG("HB TIMEOUT idx=%d nick='%s' fd=%d is_conn=%d last_hb=%ld now=%ld",
+    //      i, clients[i].nick, clients[i].socket_fd, clients[i].is_connected,
+    //      (long)clients[i].last_heartbeat, (long)now);
 
-    // --- pod mutexem si "vezmu" starý socket a označím stav ---
     int oldfd = clients[i].socket_fd;
-    GameRoom *room = clients[i].current_room; // jen pointer, nepřistupovat mimo mutex k jeho vnitřku, pokud není thread-safe
+    GameRoom *room = clients[i].current_room;
 
     clients[i].socket_fd = -1;
     clients[i].is_connected = 0;
     clients[i].disconnect_time = now;
     clients[i].is_active = 0;
 
-    // (volitelné) uložit last_status apod., pokud to používáš
     clients[i].last_status = clients[i].status;
 
-    // --- mimo mutex udělám IO operace (send/shutdown/close/broadcast) ---
     pthread_mutex_unlock(&clients_mutex);
 
     if (oldfd >= 0) {
-        // pokud chceš poslat info, pošli ho PŘED shutdown,
-        // ale počítej s tím, že může selhat (klient už může být pryč)
         send_message(oldfd, LBBY, "Ztraceno spojení (heartbeat)");
 
-        // klíčové: probudit recv() ve starém klientském vlákně
+        // probudit recv() ve starém klientském vlákně
         shutdown(oldfd, SHUT_RDWR);
         close(oldfd);
     }
 
     if (room) {
-        // broadcast mimo clients_mutex (jak už děláš)
         broadcast_to_room(room->room_id, LBBY, "Protihráč se odpojil", -1);
-        // leave_room(room->room_id, clients[i].player_id);
-
-        // pokud game_pause není thread-safe vůči dalším akcím, řeš to vlastním mutexem hry/room
         if (room->game_instance) {
             game_pause((GameInstance*)room->game_instance, "Protihráč se odpojil");
         }
@@ -199,12 +189,11 @@ void generate_token(char *token, int length) {
 }
 
 void* client_handler(void* arg){
+    // Předání kontextu uživatele
     ThreadContext *context = (ThreadContext*)arg;
     int client_sock = context->socket_fd;
     int client_index = context->client_index;
     free(context);
-
-    // printf("Index: %d\n",client_index);
 
     ClientContext *client = &clients[client_index];
 
@@ -218,14 +207,11 @@ void* client_handler(void* arg){
     client->is_connected = 0;
     client->disconnect_time = 0;
     client->last_heartbeat = time(NULL);
-    // memset(client->nick, 0, NICK_LEN + 1);
+    // memset(client->nick, 0, NICK_LEN + 1);   // Jméno nenastavovat -> nebylo by možné dohledat klienty
     pthread_mutex_unlock(&clients_mutex);
 
-    DLOG("THREAD START slot=%d fd=%d nick='%s' is_conn=%d",
-     client_index, client_sock, client->nick, client->is_connected);
-
-
-
+    // DLOG("THREAD START slot=%d fd=%d nick='%s' is_conn=%d",
+    // client_index, client_sock, client->nick, client->is_connected);
     // printf("=== ClientContext ===\n");
     // printf("socket_fd           : %d\n", client->socket_fd);
     // printf("player_id           : %d\n", client->player_id);
@@ -243,12 +229,7 @@ void* client_handler(void* arg){
     // printf("token               : '%s'\n", client->token);
 
     // printf("=====================\n");
-
-
-
-    
     LOG_INFO("Vlákno spuštěno pro klienta (fd=%d, index=%d)\n", client_sock, client_index);
-    // printf("Vlákno spuštěno pro klienta (fd=%d, index=%d, nick=%s)\n", client_sock, client_index, client->nick);
 
     while(1){
         ProtocolHeader header;
@@ -257,22 +238,13 @@ void* client_handler(void* arg){
 
         int message_status = read_full_message(client_sock, &header, &message_body);
 
-        // Kontrola chyb
-        // if(message_status == -1) {
-        //     // Klient se odpojil nebo síťová chyba
-        //     LOG_INFO("Klient se odpojil (fd=%d)\n", client_sock);
-        //     printf("Klient se odpojil.\n");
-        //     if(message_body) free(message_body);
-        //     break;
-        // }
-
         if (message_status == -1) {
             LOG_INFO("Klient se odpojil (fd=%d, idx=%d, nick=%s)\n",
                     client_sock, client_index, clients[client_index].nick);
 
-            DLOG("DISCONNECT fd=%d slot=%d (before) ctx_fd=%d is_conn=%d nick='%s'",
-     client_sock, client_index, clients[client_index].socket_fd,
-     clients[client_index].is_connected, clients[client_index].nick);
+            // DLOG("DISCONNECT fd=%d slot=%d (before) ctx_fd=%d is_conn=%d nick='%s'",
+            // client_sock, client_index, clients[client_index].socket_fd,
+            // clients[client_index].is_connected, clients[client_index].nick);
 
 
             pthread_mutex_lock(&clients_mutex);
@@ -288,9 +260,9 @@ void* client_handler(void* arg){
 
             pthread_mutex_unlock(&clients_mutex);
 
-            DLOG("DISCONNECT slot=%d (after) ctx_fd=%d is_conn=%d disc_time=%ld",
-     client_index, clients[client_index].socket_fd,
-     clients[client_index].is_connected, (long)clients[client_index].disconnect_time);
+            // DLOG("DISCONNECT slot=%d (after) ctx_fd=%d is_conn=%d disc_time=%ld",
+            // client_index, clients[client_index].socket_fd,
+            // clients[client_index].is_connected, (long)clients[client_index].disconnect_time);
 
 
             close(client_sock); // zavřít fd vlákna
@@ -338,6 +310,7 @@ void* client_handler(void* arg){
                     
                     const char *sep = strchr(message_body, '|');
 
+                    // Pokud přišel požadavek s tokenem
                     if (sep) {
                         size_t nick_len = sep - message_body;
                         
@@ -362,8 +335,8 @@ void* client_handler(void* arg){
 
                         has_token = 1;
                         printf("Reconnect pokus: nick=%s, token=%s\n", nick, token);
-                        printf("Pokus o reconnect.\n");
                     }
+                    // Pokud nepřišel požadavek s tokenem
                     else{
                         size_t nick_len = strlen(message_body);
 
@@ -377,39 +350,39 @@ void* client_handler(void* arg){
                         printf("Nové připojení: nick=%s\n", nick);
                     }
                 
-                    DLOG("LOGI recv slot=%d fd=%d body='%s'", client_index, client_sock, message_body);
+                    // DLOG("LOGI recv slot=%d fd=%d body='%s'", client_index, client_sock, message_body);
 
                     // POKUS O RECONNECT - najdi hráče podle nicku
                     int existing_idx = find_player_by_nick(nick);
+                    LOG_INFO("Nick: %s, has_token:%d, token:%s", nick, has_token, token);
 
-                    DLOG("RECO CHECK nick='%s' token_recv='%s' token_ctx='%s' has_token=%d existing_idx=%d existing_is_conn=%d existing_fd=%d",
-                    nick, token, (existing_idx>=0 ? clients[existing_idx].token : "-"),
-                    has_token, existing_idx,
-                    existing_idx>=0 ? clients[existing_idx].is_connected : -1,
-                    existing_idx>=0 ? clients[existing_idx].socket_fd : -1);
+                    // DLOG("RECO CHECK nick='%s' token_recv='%s' token_ctx='%s' has_token=%d existing_idx=%d existing_is_conn=%d existing_fd=%d",
+                    // nick, token, (existing_idx>=0 ? clients[existing_idx].token : "-"),
+                    // has_token, existing_idx,
+                    // existing_idx>=0 ? clients[existing_idx].is_connected : -1,
+                    // existing_idx>=0 ? clients[existing_idx].socket_fd : -1);
 
 
                     
                     if(existing_idx >= 0) {
-                        if(clients[existing_idx].is_connected || !has_token){
+                        if(clients[existing_idx].is_connected /*|| !has_token*/){
                             LOG_DEBUG("DEBUG: Jméno je obsazené (is_connected=1)\n");
                             send_error(client->socket_fd, "Uživatel již existuje");
                             close(client->socket_fd);
                             break;
                         }
-                        DLOG("RECO TOKEN CMP idx=%d recv='%s' ctx='%s' strcmp=%d",
-                        existing_idx, token, clients[existing_idx].token,
-                        strcmp(clients[existing_idx].token, token));
+                        // DLOG("RECO TOKEN CMP idx=%d recv='%s' ctx='%s' strcmp=%d",
+                        // existing_idx, token, clients[existing_idx].token,
+                        // strcmp(clients[existing_idx].token, token));
 
-                        if (strcmp(clients[existing_idx].token, token) != 0){
-                            send_error(client->socket_fd, "Neplatný token");
-                            break;
-                        }
-
-                        // printf("Hráč %s se reconnectuje.", nick);
+                        // Porovnání tokenů
+                        // if (strcmp(clients[existing_idx].token, token) != 0){
+                        //     send_error(client->socket_fd, "Neplatný token");
+                        //     break;
+                        // }
                         if (existing_idx != client_index){
-                            DLOG("RECO SWAP newfd=%d -> idx=%d (oldfd=%d)",
-                            client_sock, existing_idx, clients[existing_idx].socket_fd);
+                            // DLOG("RECO SWAP newfd=%d -> idx=%d (oldfd=%d)",
+                            // client_sock, existing_idx, clients[existing_idx].socket_fd);
 
                             clients[existing_idx].socket_fd = client_sock;
                             clients[existing_idx].is_active = 1;
@@ -428,10 +401,11 @@ void* client_handler(void* arg){
                             clients[client_index].last_heartbeat = time(NULL);
                             clients[client_index].status = clients[client_index].last_status;
                             
-                            // DŮLEŽITÉ: UNLOCK PŘED voláním externích funkcí!
                             pthread_mutex_unlock(&clients_mutex);
-                            
                             send_message(clients[client_index].socket_fd, RECO, "Reconnect úspěšný");
+
+                            // Na základě posledního statu před odhlášením pošli poslední stav
+                            // Stav se nemohl změnit, protože klient byl odpojen ve chvíli, kdy druhý uživatel nemohl učinit další tah
                             switch(client->last_status){
                                 case CONNECTED:
                                     send_message(client->socket_fd, OKAY, "LOBBY");
@@ -463,12 +437,10 @@ void* client_handler(void* arg){
                         }
                             LOG_INFO("Reconnect úspesny");
                             usleep(10000);
-                            
-                            // Nyní můžeme bezpečně volat get_room_info
+
                             pthread_mutex_lock(&clients_mutex);
                             GameRoom *room = clients[client_index].current_room;
                             int room_id = room ? room->room_id : -1;
-                            // void *game_inst = (room && room->game_instance) ? room->game_instance : NULL;
                             pthread_mutex_unlock(&clients_mutex);
                             
                             if (room) {
@@ -497,7 +469,6 @@ void* client_handler(void* arg){
 
                                     broadcast_to_room(room_id, RESU, "Hráč se vrátil do hry, obnovuji hru", -1);
                                 } else{
-                                    printf("Jop byl jenom v místnosti\n");
                                     client->status = CONNECTED;
                                 }
                             }
@@ -505,9 +476,9 @@ void* client_handler(void* arg){
                         }
                     
                     
-                    // NOVÝ HRÁČ
+                    // Nejedná se o reconnect, ale o nového hráče
                     LOG_DEBUG("Vytvářím nového hráče '%s' na slotu %d\n", nick, client_index);
-                    strncpy(client->nick, message_body, NICK_LEN);
+                    strncpy(client->nick, nick, NICK_LEN);
                     client->nick[NICK_LEN] = '\0';
                     client->status = CONNECTED;
                     client->is_connected = 1;
@@ -516,6 +487,7 @@ void* client_handler(void* arg){
                     client->player_id = client_index;
                     generate_token(client->token, TOKEN_LEN); 
                     
+                    // Vygenerovaný token pošli s potvrzovací zprávou
                     char message[40];
                     snprintf(message, sizeof(message), "Vítej ve hře!|%s", client->token);
                     send_message(client->socket_fd, OKAY, message);
@@ -527,7 +499,7 @@ void* client_handler(void* arg){
                     should_disconnect = 1;
                     
                 }
-                // Pokud přijde dřív PING než LOGI, je to v pořádku
+                // Pokud přijde dřív PING než LOGI, je to v pořádku -> ignorování
                 else if(strcmp(header.type_msg, PING) == 0){
                     continue;
                 } 
@@ -541,13 +513,16 @@ void* client_handler(void* arg){
             }
 
             case CONNECTED: {
+                // Uživatel se odpojuje
                 if(strcmp(header.type_msg, QUIT) == 0) {
                     should_disconnect = 1;
                     
                 } else if(strcmp(header.type_msg, PONG) == 0) {
-                    // Heartbeat aktualizován
+                    // Heartbeat aktualizován -> žádná reakce netřeba
 
-                } else if(strcmp(header.type_msg, RLIS) == 0) {
+                } 
+                // Zašli klientovi aktuální místnosti, pokud existují
+                else if(strcmp(header.type_msg, RLIS) == 0) {
                     char room_list[4096];
                     int count = get_room_list(room_list, sizeof(room_list));
 
@@ -557,7 +532,9 @@ void* client_handler(void* arg){
                         send_message(client->socket_fd, ELIS, "Žádné místnosti");
                     }
                 
-                } else if(strcmp(header.type_msg, RCRT) == 0) {
+                } 
+                // Vytvoř místnost, pokud to lze a připoj tvůrce do místnosti
+                else if(strcmp(header.type_msg, RCRT) == 0) {
                     if(!message_body || strlen(message_body) == 0) {
                         send_message(client->socket_fd, ECRT, "Chybí název");
                         break;
@@ -582,7 +559,9 @@ void* client_handler(void* arg){
                         send_message(client->socket_fd, ECRT, "Nelze vytvořit");
                     }
                     
-                } else if(strcmp(header.type_msg, RCNT) == 0) {
+                } 
+                // Pokud existuje požadovaná místnost, připoj klienta do místnosti, pokud tak může učinit
+                else if(strcmp(header.type_msg, RCNT) == 0) {
                     if(!message_body || strlen(message_body) == 0){
                         send_message(client->socket_fd, ECNT, "Chybí ID");
                         break;
@@ -599,7 +578,9 @@ void* client_handler(void* arg){
                         send_message(client->socket_fd, ECNT, "Nelze připojit");
                     }
                     
-                } else {
+                } 
+                // Pokud cokoliv jiného, odpoj klienta
+                else {
                     send_error(client->socket_fd, "Neznámý příkaz (CONNECTED)");
                     client->invalid_message_count++;
                     should_disconnect = 1;
@@ -617,7 +598,7 @@ void* client_handler(void* arg){
                 }
                 
                 int room_id = room->room_id;
-                
+                // Pokud lze, odpoj klienta z místnosti, předej vedení, případně smaž místnost
                 if(strcmp(header.type_msg, RDIS) == 0){
                     pthread_mutex_unlock(&clients_mutex);
                     
@@ -634,9 +615,11 @@ void* client_handler(void* arg){
                     send_message(client->socket_fd, ODIS, "Opuštěno");
                     
                 } else if(strcmp(header.type_msg, PONG) == 0) {
-                    // Heartbeat aktualizován
+                    // Heartbeat aktualizován -> reakce netřeba
 
-                } else if(strcmp(header.type_msg, REDY) == 0){
+                } 
+                // Od/připrav klienta v místnosti
+                else if(strcmp(header.type_msg, REDY) == 0){
                     int ready = (message_body && message_body[0] == '1') ? 1 : 0;
 
                     if(set_player_ready(room_id, client_index, ready) == 0){
@@ -660,7 +643,9 @@ void* client_handler(void* arg){
                         send_error(client->socket_fd, "Chyba ready");
                     }
                     
-                } else if(strcmp(header.type_msg, STRT) == 0){          
+                } 
+                // Pokud může být hra spuštěna, spusť hru
+                else if(strcmp(header.type_msg, STRT) == 0){          
                     if(room->owner_index != client_index){
                         send_message(client->socket_fd, ESTR, "Pouze owner");
                         break;
@@ -670,9 +655,6 @@ void* client_handler(void* arg){
                         send_message(client->socket_fd, ESTR, "Ne všichni jsou připraveni");
                         break;
                     }
-
-                    // printf("%d | %d\n", room->ready_count, room->player_count);
-                    
                     GameInstance *game = game_create(room);
                     
                     if(!game){
@@ -682,7 +664,7 @@ void* client_handler(void* arg){
 
                     room->game_instance = game;
 
-                    if(game_start(game) != 0){              // <-- tady musi byt ==
+                    if(game_start(game) != 0){
                         send_message(client->socket_fd, ESTR, "Chyba při startu");
                         game_destroy(game);
                         room->game_instance = NULL;
@@ -753,6 +735,7 @@ void* client_handler(void* arg){
                 GameInstance *game = (GameInstance*)room->game_instance;
                 int room_id = room->room_id;
 
+                // Hráč chce lízat z balíčku
                 if(strcmp(header.type_msg, TAKP) == 0){
                     // Lízni z balíčku
                     int result = game_process_move(game, client_index, header.type_msg, message_body);
@@ -783,6 +766,8 @@ void* client_handler(void* arg){
                             }
                         }
                     }
+
+                    // Chybové stavy
                     else if(result == -2){
                         send_error(client->socket_fd, "Již jsi lízl");
                     }
@@ -802,8 +787,9 @@ void* client_handler(void* arg){
                     // Heartbeat aktualizován
 
                 }
+                // Hráč chce vzít vyhozenou kartu
                 else if(strcmp(header.type_msg, TAKT) == 0){
-                    // Lízni z trash
+                    // Lízni z vyhozených
                     int result = game_process_move(game, client_index, header.type_msg, message_body);
                     
                     if(result == 0){
@@ -826,6 +812,8 @@ void* client_handler(void* arg){
                             }
                         }
                     }
+
+                    // Chybové stavy
                     else if(result == -2){
                         send_error(client->socket_fd, "Již jsi lízl");
                     } else if (result == -3){
@@ -913,18 +901,13 @@ void* client_handler(void* arg){
                                     }
                                 }
                             } else {
-                                // 1. Aktualizace statusů v poli clients (pro interní logiku serveru)
-                                // Současný hráč (ten, co vyhodil) přechází na čekání
                                 client->status = ON_WAIT;
 
-                                // Najdeme index dalšího hráče na řadě
                                 int next_idx = room->player_indexes[game->current_player_index];
                                 if(next_idx != -1 && next_idx < MAX_CLIENTS){
                                     clients[next_idx].status = ON_TURN;
                                 }
 
-                                // 2. BROADCAST: Pošleme zprávu STAT (UPDT) oběma hráčům
-                                // Projdeme všechny sloty v místnosti
                                 for(int i = 0; i < MAX_PLAYERS_PER_ROOM; i++) {
                                     int idx = room->player_indexes[i];
                                     
@@ -932,14 +915,11 @@ void* client_handler(void* arg){
                                         char full_state[4096];
                                         int target_id = clients[idx].player_id;
                                         
-                                        // Vygenerujeme personalizovaný stav (obsahuje ruku, postupky, TURN/WAIT i enemy_count)
                                         int written = game_get_full_state(game, target_id, full_state, sizeof(full_state));
                                         
                                         if(written > 0) {
-                                            // Pošleme sjednocenou zprávu STAT (místo CRDS, TURN nebo WAIT)
                                             send_message(clients[idx].socket_fd, "STAT", full_state);
                                             
-                                            // Volitelně můžeš nechat krátkou textovou zprávu pro konzoli v Pygame
                                             if(clients[idx].status == ON_TURN) {
                                                 send_message(clients[idx].socket_fd, TURN, "Jsi na tahu");
                                             } else {
@@ -951,6 +931,8 @@ void* client_handler(void* arg){
                             }
                         }
                     }
+
+                    // Chybové stavy
                     else if (result == -2){
                         send_error(client->socket_fd, "Nejdříve musíš líznout.");
                     }
@@ -989,14 +971,13 @@ void* client_handler(void* arg){
                         broadcast_to_room(room_id, GEND, end_report, -1);
                         pthread_mutex_lock(&clients_mutex);
                         
-                        // Vrať všechny do IN_ROOM
+                        // Vlož hráče do ukončené hry
                         room = find_room(room_id);
                         if(room){
                             for(int i = 0; i < MAX_PLAYERS_PER_ROOM; i++){
                                 int idx = room->player_indexes[i];
                                 if(idx != -1 && idx < MAX_CLIENTS){
                                     clients[idx].status = GAME_DONE;
-                                    // printf("Status pro index %d = %d\n", idx, clients[idx].status);
                                 }
                             }
                         }
@@ -1258,6 +1239,12 @@ void* client_handler(void* arg){
         }
     }
 
+
+    if(client->current_room){
+        if(!client->current_room->game_instance){
+            leave_room(client->current_room->room_id, client->player_id);
+        } else printf("POZOR: Hráč v místnosti se hrou\n");
+    }
     // Cleanup
     LOG_INFO("Klient %s se odpojuje (fd=%d, slot=%d)\n", 
            client->nick[0] ? client->nick : "unknown", client_sock, client_index);
@@ -1276,9 +1263,6 @@ void* client_handler(void* arg){
             game_pause((GameInstance*)client->current_room->game_instance, "Hra pozastavena - čeká se na reconnect");
         }
     }
-    
-    // printf("%d | %d | %d\n", client_sock, );
-    // int sock = client->socket_fd;
     if(client_sock > 0) {
         close(client_sock);
     }
@@ -1287,7 +1271,6 @@ void* client_handler(void* arg){
     client->is_connected = 0;
     client->disconnect_time = time(NULL);
     client->is_active = 0;
-    // printf("Status klienta před odpojením: %d (ukládám do last_status)\n", client->status);
     client->last_status = client->status;
     client->status = DISCONNECTED;
 

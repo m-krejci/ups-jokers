@@ -1,0 +1,358 @@
+\documentclass{article}
+\usepackage{graphicx} % Required for inserting images
+\usepackage[margin=3cm]{geometry}
+\usepackage[dvipsnames]{xcolor}
+\usepackage[x11names]{xcolor}
+\usepackage{hyperref}
+\usepackage[czech]{babel}
+\usepackage{tabularx} % Lepší tabulky
+\hypersetup{
+    colorlinks=true,
+    linkcolor=DodgerBlue4,
+    filecolor=cyan,      
+    urlcolor=MidnightBlue,
+    pdftitle={Overleaf Example},
+    pdfpagemode=FullScreen,
+    }
+
+
+\title{KIV-UPS Jokers}
+\author{Matyáš Krejčí}
+\date{January 2026}
+
+\begin{document}
+\begin{titlepage}
+    \centering
+    \vspace*{2cm}
+
+    {\Large Západočeská univerzita v Plzni}\\
+    {\large Fakulta aplikovaných věd}\\
+    \vspace{0.5cm}
+    {\large KIV/UPS}
+
+    \vspace{2.5cm}
+
+    {\Huge\bfseries Semestrální práce}
+
+    \vspace{1.5cm}
+
+    {\LARGE\bfseries Síťová hra Žolíci}
+
+    \vspace{2.5cm}
+
+    \begin{tabular}{rl}
+        \textbf{Autor:} & Matyáš Krejčí \\
+        \textbf{Email:} & \texttt{krejcim@gapps.zcu.cz} \\
+        \textbf{Předmět:} & KIV/UPS \\
+        \textbf{Datum vytvoření:} & 12. 1. 2026 \\
+        \textbf{Repo:} & \href{https://github.com/m-krejci/ups-jokers}{Github}
+    \end{tabular}
+
+    \vfill
+
+    {\large Plzeň, 2026}
+
+\end{titlepage}
+
+\newpage
+\tableofcontents
+\newpage
+\section{Zadání}
+Náplní této semestrální práce je vytvoření plně funkční síťové hry. Toto obnáší vytvoření herního serveru, který se bude starat o veškerou logiku, bude udržovat stavy hráčů, místností a her a uchovávat a spravovat informace o klientech (uživatelích). Pro grafické rozhraní je potřeba vytvořit klienta, který bude velice jednoduchou a snadno uchopitelnou grafikou zprostředkovávat uživateli informace jdoucí ze serveru. Aby bylo možné informace ze serveru přenášet po síti klientovi a naopak, je naprosto nezbytné mít definovaný komunikační protokol. Zprávy potom mohou být testovány na správnost, čímž bude možné vyhodnocovat případné chybové stavy jak na straně klienta, tak na straně serveru. Plné zadání semestrální práce, jednotlivé body zadání a specifikaci požadované funkcionality je možné nalézt na \href{https://home.zcu.cz/~ublm/files/PozadavkyUPS.pdf}{tomto odkazu}. 
+
+\subsection{Návrh aplikace}
+Uživatel se po spuštění aplikace dostane na přihlašovací obrazovku, kde musí zadat své jméno, adresu serveru a port, na kterým server naslouchá. Kliknutím na ``připojit`` odešle požadavek k připojení a server vrací zprávu, která je buď úspěšného nebo neúspěšného charakteru. Pokud se stal neúspěch, aplikace uživateli sdělí, o jakou chybu se jedná. Klientská aplikace sama kontroluje, zda-li uživatel zadal nevhodné údaje pro adresu serveru nebo číslo portu a dokud tato data nejsou korektní, žádný požadavek neodesílá. Server pro chybu může klientovi sdělit, že jméno, pod kterým chtěl vystupovat, je na serveru zabrané. Pokud ale klient odpoví úspěchem, klient je přivítán do hry a je mu zaslán unikátní token, kterým se bude prokazovat v případě krátkodobého výpadku sítě. Klient se po připojení nachází v lobby, kde má možnost vytvořit místnost nebo se připojit k již existující místnosti. Po připojení do místnosti se musí připravit a dokud není naplněna, čekat na protihráče. Pokud jsou oba hráči připraveni ke hře, uživatel, který místnost vytvořil nebo zdědil po předchozím majiteli může spustit hru. Hráči se potom dostávají do obrazovky s kartami, kde se střídají podle pravidel žolíků. Jakmile jeden hráč zavře, oba se přesouvají do obrazovky s výsledky a mají možnost hrát opakovaně, či hru opustit. Jakmile ale jeden odejde zpět do lobby, dostává se tam i druhý, který již nemá na co čekat.
+
+\subsubsection{Reconnect}
+Reconnect je v aplikaci řešen jak na straně serveru, tak na straně klienta pomocí heartbeat vlákna. Toto vlákno registruje příjem zpráv a obnovuje timestamp posledního kontaktu. Server navíc odesílá každé 3 vteřiny PING, který když klient přijme, odpoví PONG. Jakmile 10 sekund (tedy 3x PING/PONG) nepřijme jedna, či druhá strana jakoukoliv zprávu, odpojuje se. Pokud se v tuto situaci jedná o klienta, zahajuje vlákno reconnectu, tedy na základě exponencionálního timeoutu (počínaje t = 2, max=30) se snaží se serverem opět navázat spojení. Pakliže se spojení povede navázat, odesílá stejnou zprávu jako při prvotním připojení, ale obohacenou o token, který byl klientovi zaslán. Tímto se zabrání sebrání relace (session hijacking) a reconnect na straně serveru může proběhnout, jestliže je token správný. Při odpojení klient přepíná obrazovku na původní přihlašovací a server zasílá zprávu klientovi v místnosti, že se protihráč odhlásil $\rightarrow$ vykreslení obrazovky.
+
+\subsection{Poznámka k návrhu}
+Vzhledem k omezenému času ke kontrole projektu jsou některá pravidla klasických žolíků upravena, respektive zjednodušena.
+\begin{enumerate}
+    \item Hráči nemusí dosáhnout určitého součtu vykládaných karet (defaultně 42).
+    \item Hráči mohou přikládat bez vyložených karet.
+    \item Hráči mohou brát vyhozené karty, kdykoliv se nějaká v balíčku nachází.
+    \item Hráči nemusí kartu z vyhozených karet hned použít a mohou si ji jednoduše ponechat.
+\end{enumerate}
+
+\section{Protokol}
+Aplikace běží na vlastním textovém protokolu nad transportním protokolem TCP. Textový protokol má fixní pravidla, která jsou kontrolována jak na serveru, tak na klientské straně při příjmu zprávy.
+\subsection{Formát zpráv}
+Jak již bylo zmíněno, každá zpráva má fixní formát. Obě strany tento formát očekávají, a pokud nastane jiná situace, vhodně na to reagují (tradičně se odpojí). Při příjmu je zpráva rozparsována a kontrolována po jednotlivých částech.\\ \\
+\noindent \textbf{Formát zprávy}:
+
+\begin{center}
+    \texttt{\textcolor{Red}{MAGIC}\textcolor{RoyalBlue}{TYPE\_MESSAGE}\textcolor{Red}{MESSAGE\_LENGTH}\textcolor{RoyalBlue}{ACTUAL\_MESSAGE}}
+\end{center}
+
+\noindent Pro jednoduchost při kontrole a parsování je každá část zprávy (kromě \texttt{ACTUAL\_MESSAGE}) dlouhá přesně 4 znaky. To vyúsťuje k tomu, že maximální délka zprávy může být maximálně 9999 znaků dlouhá (což na účely hry je více než dostačující -- až spíše nepotřebné). Délka zprávy se kontroluje před odesláním a je zároveň kontrolována při příjmu, pokud by k odeslání skutečně došlo). \\ \\
+
+
+\begin{table}[!h]
+    \centering
+    \begin{tabularx}{\textwidth}{|c|c|X|} \hline
+     \textbf{Část zprávy} & \textbf{Nabývající hodnoty} & \textbf{Popis} \\ \hline
+     MAGIC & ``JOKE`` & Pevně definovaná hodnota na úplném začátku každé zprávy \\ \hline 
+     TYPE\_MESSAGE & LOGI, LOGO, OCRT, ... & Typy zpráv, které řídí aktivitu serveru a klienta \\ \hline
+     LENGTH\_MESSAGE & 0000 & Celé číslo maximální velikosti 9999 udávající délku těla zprávy \\ \hline
+     ACTUAL\_MESSAGE & ``user`` & Tělo zprávy – řetězec nesoucí informace z klienta nebo serveru \\ \hline 
+    \end{tabularx}
+    \caption{Popis struktury zpráv}
+\end{table}
+
+\noindent \textbf{Příklad:} Při pokusu o připojení na server klient odesílá žádost o připojení zprávou s kódem \texttt{LOGI}, kde tělo zprávy obsahuje přezdívku, pod kterou chce uživatel vystupovat. Taková zpráva by potom vypadala takto:
+
+\begin{center}
+    \texttt{\textbf{JOKE}LOGI\textbf{0008}\textit{uzivatel}}
+\end{center}
+
+\subsection{Přenášené struktury, datové typy}
+\subsubsection{\textbf{MAGIC}}
+\begin{itemize}
+    \item[-] ASCII řetězec
+    \item[-] Délka \texttt{4}
+    \item[-] Identifikace protokolu
+\end{itemize}
+\subsubsection{\textbf{TYPE}}
+\begin{itemize}
+    \item[-] Výčtový typ $\rightarrow$ ASCII řetězec
+    \item[-] Délka \texttt{4}
+    \item[-] Určuje typ zprávy
+\end{itemize}
+\subsubsection{\textbf{LENGTH}}
+\begin{itemize}
+    \item[-] Integer
+    \item[-] Rozsah $0000-9999$
+    \item[-] Informuje o délce zprávy
+\end{itemize}
+\subsubsection{\textbf{MESSAGE}}
+\begin{itemize}
+    \item[-] ASCII řetězec (ASCII / utf-8)
+    \item[-] Délka proměnná
+    \item[-] Aplikační data
+\end{itemize}
+\subsubsection{\textbf{Packet}}
+Všechny výše zmíněné části zprávy se potom poskládají do jednoho ASCII řetězce (build) a v tomto formátu se následně odesílají a na druhé straně jsou parsované, kontrolované, případně použity k dalším akcím.
+\newpage
+\subsection{Výčet zpráv}
+\begin{table}[!h]
+    \centering
+    \begin{tabularx}{\textwidth}{|c|c|X|} \hline
+         \textbf{Typ zprávy} & \textbf{Využívající strana} & Popis účelu  \\ \hline
+          ADDC & K + S & Přidání karty do postupky \\ \hline
+          BOSS & K + S & Určení majitele místnosti  \\ \hline
+          CLOS & K + S & Zavření poslední kartou  \\ \hline
+          CRDS & K + S & Informace o kartách v ruce  \\ \hline
+          CSEQ & K + S & Vytvoření postupky  \\ \hline
+          ECNT & K + S & Chyba připojení k místnosti \\ \hline
+          ECRT & K + S & Chyba vytvoření místnosti \\ \hline
+          EDIS & K + S & Chyba odpojení z místnosti \\ \hline
+          EEDY & K + S & Chyba při pokusu o status ``Připravený`` před hrou \\ \hline
+          ELIS & K + S & Chyba při pokusu o vylistování místností  \\ \hline
+          ERRR & K + S & Obecná chyba využita na více místech  \\ \hline
+          ESTR & K + S & Chyba při pokusu o start hry \\ \hline
+          GEND & K + S & Informace o skončení hry \\ \hline
+          LBBY & K + S & Inforamce o přesunu do lobby \\ \hline
+          LOGI & K + S & Klient odesílá požadavek o připojení \\ \hline
+          LOGO & K + S & Pokus o odhlášení \\ \hline
+          NOTI & K + S & Notifikace (obecná) \\ \hline
+          OCNT & K + S & Potvrzení o připojení k místnosti\\ \hline
+          OCRT & K + S & Potvrzení o vytvoření místnosti\\ \hline
+          ODIS & K + S & Potvrzení o odpojení z místnosti\\ \hline
+          OEDY & K + S & Potvrzení a změně stavu na ``Připravený`` před hrou\\ \hline
+          OKAY & K + S & Potvrzení (obecné) \\ \hline
+          PAUS & K + S & Změna stavu hry na ``pozastavená`` \\ \hline
+          PING & K + S & Informace o aktivitě ze strany serveru \\ \hline
+          PLAG & K + S & Žádost/potvrzení o opakovaném hraní se stejným uživatelem\\ \hline
+          PONG & K + S & Informace o aktivitě ze strany klienta\\ \hline
+          PRDY & K + S & Žádost/odpověď s počtem připravených uživatelů \\ \hline
+          QUIT & K + S & Opuštění (obecné) \\ \hline
+          RCNT & K + S & Žádost o připojení k místnosti\\ \hline
+          RCRT & K + S & Žádost o vytvoření místnosti\\ \hline
+          RDIS & K + S & Žádost o opuštění místnosti\\ \hline
+          REDY & K + S & Žádost o změnu stavu na ``připravený``\\ \hline
+          RINF & K + S & Žádost o informace o místnosti \\ \hline
+          RLIS & K + S & Žádost o vylistování místností \\ \hline
+          STAT & K + S & Informace o herním stavu (karty, karty protihráče, ...)\\ \hline
+          STRT & K + S & Žádost o start hry \\ \hline
+          TAKP & K + S & Žádost o kartu z balíčku \\ \hline
+          TAKT & K + S & Žádost o kartu z vyhozených karet \\ \hline
+          THRW & K + S & Žádost o vyhození karty \\ \hline
+          TURN & K + S & Změna aktuálního hráče na hrajícího\\ \hline
+          UNLO & K + S & Žádost o vyložení karet (postupka, set)\\ \hline
+          WAIT & K + S & Změna aktuálního hráče na čekajícího\\ \hline
+    \end{tabularx}
+    \caption{Výčet zpráv}
+    \label{tab:placeholder}
+\end{table}
+
+\subsection{Stavový diagram protokolu}
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=1\linewidth]{diagram.drawio.png}
+    \caption{Stavový diagram}
+    \label{fig:placeholder}
+\end{figure}
+
+\section{Server}
+\subsection{Moduly}
+\subsubsection{Makefile a CMakeLists.txt}
+Tyto soubory slouží pro sestavení serverové aplikace. \texttt{Makefile} umožňuje jednoduchou a rychlou kompilaci projektu pomocí nástroje \texttt{make}, \texttt{CMakeLists.txt} slouží k sestavení projektu pomocí \texttt{CMake} umožňuje generovat build pro různé překladače. V projektu byl použit především k debugování. 
+\subsubsection{client\_manager (.c + .h)}
+Soubor \texttt{client\_manager} je hlavní soubor k obluze klienta. Udržuje pole struktur, které obsahují informace o jednotlivých klientech, validuje kroky klienta v jednotlivých stavech a na jejich základě odesílá zprávy. Zároveň rozhoduje o připojení klienta, respektive jeho odpojení.
+\subsubsection{config.h}
+Tento soubor by se dal nazvat konfiguračním souborem, definuje ty absolutně nejzákladnější konstanty.
+\subsubsection{game\_manager (.c + .h)}
+Tento soubor obsluhuje hru -- vytváří, maže, kontroluje, zda-li krok klienta byl validní či nikoliv. Na začátku inicializuje hru, určí hráče na ``tahu`` a hráče, který čeká, následně inicializuje balíček a rozdá karty (uchovává informace ve strukturách, \texttt{client\_manager} potom rozesílá data uživatelům). 
+\subsubsection{logger (.c + .h)}
+\texttt{logger} je modul, který slouží k jednoduchému zapsání stavu do loggovacího souboru. Umožňuje úrovně od nejnižší \texttt{DEBUG} po nejvyšší \texttt{FATAL}.
+\subsubsection{main.c}
+Vstupní soubor aplikace, nastavuje logger, inicializuje pole klientů, her a místností, spouští server.
+\subsubsection{protocol (.c + .h)}
+Obsahuje pole možných zpráv, má speciální metody na přijímání a odesílání zpráv -- čte po částech, dokud nepřečte celou zprávu.
+\subsubsection{room\_manager (.c + .h)}
+Hlavní správce místností. Vytváří místnost, čeká na uživatele, připravuje uživatele (do stavu ``ready``), získává informace o místnosti, případně místnost maže, pakliže je prázdná.
+\subsubsection{server\_manager (.c + .h)}
+Hlavní síťové nastavení. Nastavuje socket, adresu serveru, port na kterém naslouchá, přijímá a odmítá klienty, startuje hlavní klientské vlákno a vlákno timeout.
+\section{Klient}
+\subsection{Moduly a třídy}
+\subsubsection{card.py}
+Třída pro uchování objektu karty, definující kliknutený obdélník pro GUI, označování a registrování kliku na kartu.
+\subsubsection{clientgui.py}
+
+\subsubsection{console.py}
+Třída definující herní konzoli, která zobrazuje některé zprávy serveru (negativní i pozitivní) a některé zprávy, které je schopen vyhodnotit sám klient.
+\subsubsection{constants.py}
+Soubor uchovávající nejdůležitější globální konstanty protokolu, velikosti herního okna, velikosti karet, cest k obrázkům a barvy používané pro grafické okno.
+\subsubsection{gamestate.py}
+Výčtový typ uchovávající možné stavy klientské strany.
+\subsubsection{logger.py}
+Stejná funkcionalita loggeru jako na straně serveru.
+\subsubsection{main.py}
+Vstupní bod aplikace, nastavuje logger a spouští klientskou aplikaci.
+\subsubsection{message\_handler.py}
+Soubor obsahuje funkce, které spravují příjem a odesílání zpráv, kontrolu přijatých zpráv a kontrolu zpráv odcházejících z klienta (především aby nepřesahovaly maximální délku).
+\subsubsection{message\_types.py}
+Výčtový typ všech zpráv, které využívá klient a server, které slouží k porovnávání přijatých zpráv a ke konstrukci zpráv k odeslání.
+\subsubsection{network.py}
+Hlavní síťová třída, která se stará o vlákno heartbeatu a vyhodnocování připojenosti k serveru, které předá do hlavního cyklu aplikace a ta potom spouští reconnect.
+\subsubsection{pages\_drawer.py}
+Třída, která se stará o vykreslování jednotlivých obrazovek dle stavu hry.
+\subsubsection{ui\_elements.py}
+Třída, která má na starost vykreslování tlačítek, vstupních polí a chybových hlášení.
+
+\subsection{Paralelizace}
+Server využívá vícevláknovou architekturu typu \textbf{Thread-per-Client}. Hlavní vlákno serveru v nekonečné smyčce přijímá nová spojení pomocí volání \texttt{accept()} a pro každého připojeného klienta vytváří samostatné obslužné vlákno (\texttt{client\_handler}), které běží v režimu detached. Kromě klientských vláken v systému běží dedikované vlákno pro správu timeoutů (\texttt{timeout\_checker\_thread}), které periodicky kontroluje stav všech slotů.
+
+\subsection{Verze}
+\subsubsection{Serverová část (C)}
+Serverová aplikace je implementována v nízkoúrovňovém jazyce C dle standardu \texttt{C11} a běží v prostředí operačního systému Linux. Pro paralelní zpracování klientů a síťovou komunikaci jsou využity následující knihovny:
+
+\begin{itemize}
+    \item \texttt{pthread.h} – POSIX Threads pro paralelizaci a správu vláken.
+    \item BSD Sockets – rozhraní pro síťovou komunikaci pomocí protokolu TCP/IP.
+    \item Standardní knihovny jazyka C (\texttt{stdio.h}, \texttt{stdlib.h}, \texttt{string.h}, \texttt{unistd.h}, \texttt{time.h}, \texttt{ctype.h}).
+    \item \texttt{arpa/inet.h}, \texttt{netinet/in.h} – práce s IP adresami a síťovými porty.
+\end{itemize}
+
+\subsubsection{Klientská část (Python)}
+Klientská aplikace je napsána v jazyce Python a zajišťuje uživatelské rozhraní i komunikaci se serverem. Aplikace využívá následující knihovny:
+
+\begin{itemize}
+    \item \texttt{pygame} – implementace grafického uživatelského rozhraní a herní logiky.
+    \item \texttt{socket} – standardní knihovna pro TCP komunikaci se serverem.
+    \item \texttt{threading} – běh síťové komunikace v samostatném vlákně.
+    \item \texttt{queue} – bezpečná výměna zpráv mezi síťovým a vykreslovacím vláknem.
+\end{itemize}
+
+\subsubsection{Prostředí a nástroje}
+Vývoj a testování aplikace probíhalo v prostředí operačního systému Linux (WSL). Pro sestavení a diagnostiku byly použity následující nástroje:
+
+\begin{itemize}
+    \item \texttt{gcc} – překladač serverové části.
+    \item \texttt{make} – nástroj pro sestavení projektu.
+    \item \texttt{netstat}, \texttt{nc} – diagnostické nástroje pro testování síťové komunikace.
+\end{itemize}
+\section{Překlad a spuštění}
+
+\subsection{Klient}
+
+\subsubsection{Překlad}
+Klientská aplikace je implementována v programovacím jazyce Python, který patří mezi interpretované jazyky. Z tohoto důvodu není nutné provádět překlad do strojového kódu a není potřeba žádná kompilace.
+
+\subsubsection{Spuštění}
+Spuštění klientské aplikace zajišťuje modul \texttt{main.py}. Aplikaci lze spustit z příkazové řádky následujícím příkazem:
+\begin{center}
+    \texttt{python3 main.py}
+\end{center}
+
+\noindent Po spuštění je uživatel vyzván k zadání základních konfiguračních údajů, konkrétně přezdívky, adresy serveru a čísla portu, na kterém server naslouchá.
+
+\subsection{Server}
+
+\subsubsection{Překlad}
+Serverová aplikace je implementována v programovacím jazyce C, a proto je před jejím spuštěním nutné provést překlad zdrojových souborů. Součástí projektu je soubor \texttt{Makefile}, který automatizuje proces překladu všech potřebných zdrojových souborů do výsledného spustitelného souboru.
+
+\noindent Překlad serveru se provede příkazem:
+\begin{center}
+    \texttt{make}
+\end{center}
+
+\subsubsection{Spuštění}
+Po úspěšném překladu lze server spustit příkazem:
+\begin{center}
+    \texttt{./zolik\_server}
+\end{center}
+
+\noindent Server se po spuštění začne naslouchat na předem definovaném portu a je připraven přijímat připojení klientských aplikací.
+
+\section{Testování}
+\subsection{Test \texttt{nc}}
+\subsubsection{Klient}
+\colorbox{lightgray}{\texttt{nc -C localhost 10000}} \\ \\
+K serveru se lze připojit pomocí příkazu \texttt{nc localhost 10000} nebo místo \texttt{localhost} zvolit konkrétní adresu nastavenou v konfiguračním souboru. Server potom vyžaduje přihlášení a další akce přesně tak, jak jsou definované v uživatelském rozhraní. Posloupnost takových příkazů potom může vypadat následovně:
+\begin{enumerate}
+    \item \textbf{JOKELOGI}0004\textit{user} \textcolor{Green}{// přihlášení uživatele}
+    \item \textbf{JOKERCRT}0008\textit{roomName} \textcolor{Green}{// vytvoření místnosti roomName}
+    \item \textbf{JOKEREDY}0001\textit{1} \textcolor{Green}{// status připravenosti}
+    \item \textbf{JOKESTRT}0000 \textcolor{Green}{// start hry}
+\end{enumerate}
+
+\subsubsection{Server}
+\colorbox{lightgray}{\texttt{nc -l -p 10000}}\\ \\
+Vytvoří server na portu 10000, na který se lze připojit klientem a testovat pomocí protokolových zpráv, které by odpovídal server.
+\begin{table}[!h]
+    \centering
+    \begin{tabular}{|c|c|} \hline
+         \normalsize{\textbf{Klient}} & \normalsize{\textbf{Odpověď serveru}} \\ \hline
+         \texttt{JOKELOGI0004user} & \texttt{JOKEOKAY0010tokentoken} \\ \hline
+         \texttt{JOKERCRT0004room} & \texttt{JOKEOCRT00010} + \texttt{JOKEBOSS00011} \\ \hline
+         \texttt{JOKEREDY00011} & \texttt{JOKERINF0017user$|$READY$|$OWNER,} \\ \hline
+         \texttt{JOKESTRT00011} & \texttt{JOKESTRT0014Hra začíná!} \\ \hline
+    \end{tabular}
+    \caption{Komunikace klient - server}
+    \label{tab:placeholder}
+\end{table}
+\subsection{Test \texttt{netstat}}
+
+\colorbox{lightgray}{\texttt{watch -n 1 "netstat -a 10000 | grep tcp"}}\\ \\
+Server se v konzoli bude zobrazovat jako LISTEN, jakýkoliv připojený klient má status ESTABLISHED. Tímto způsobem lze diagnostikovat konektivitu aplikace a sledovat životní cyklus jednotlivých TCP spojení od jejich navázání až po ukončení
+\subsection{Test \texttt{InTCPtor}}
+\href{https://github.com/MartinUbl/InTCPtor}{Interceptor} je knihovna, která zachytává volání funkcí BSD socketů souvisejících s protokolem TCP a zavádí do nich zpoždění, fragmentaci zpráv a další prvky. Byla vytvořena pro účely předmětu KIV/UPS na Západočeské univerzitě v Plzni a je šířena pod licencí MIT. Veškerou dokumentaci a konfiguraci lze najít na odkazu v první větě.
+\\ \\
+InTCPtor byl nad touto aplikací testován a aplikace je plně funkční.
+
+\subsection{Test \texttt{dev/urandom} (server)}
+\colorbox{lightgray}{\texttt{cat /dev/urandom | nc 127.0.0.1 10000}}
+\\ \\
+
+
+\subsection{Test \texttt{dev/urandom} (klient)}
+\colorbox{lightgray}{\texttt{cat /dev/urandom | nc -l 127.0.0.1 -p 10000}}
+\\ \\
+
+
+
+\section{Dosažené výsledky}
+Aplikace úspěšně navazuje spojení mezi serverem a klientem, server dokáže klienty paralelně obsluhovat, rozdělovat je do místností a zpřístupnit hru, kterou po celou dobu kontroluje (správné tahy apod.). Aplikace úspěšně reaguje na odpojení klienta/klientů, ponechává si krátkodobě jejich informace a pokud se stihnout připojit do časového limitu [2 minuty], napojí je zpět do hry. Strana serveru i klienta kontroluje vstupní data uživatele. Server i klient rozhoduje o správnosti protokolových zpráv a vhodně reaguje na porušení protokolu. Taktéž obě strany čtou zprávy, dokud nejsou přečtené celé. Co se týče pravidel hry, byly zjednodušeny pro účely aplikace. Hráči nejsou povinni dosáhnout určitého součtu vykládaných karet při prvním vyložení (standardně 42). Hráči mohou přikládat bez vyložených karet. Vyhozené karty lze brát i dříve než po uplynutí třech kol a karty si hráči mohou nechávat (nemusí ji ihned použít k vyložení). Aplikace zároveň byla testována hned několika nástroji za účelem dosažení maximální funkcionality, která je v moment odevzdávání plně potvrzena.
+\end{document}

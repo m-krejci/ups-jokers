@@ -13,6 +13,7 @@ static pthread_mutex_t games_mutex = PTHREAD_MUTEX_INITIALIZER;
 void game_init(){
     pthread_mutex_lock(&games_mutex);
 
+    // Inicializace v paměti
     for(int i = 0; i < MAX_ROOMS; i++){
         active_games[i] = NULL;
     }
@@ -24,28 +25,29 @@ void game_init(){
 }
 
 GameInstance* game_create(struct GameRoom *room){
+    // Kontrola parametru
     if(!room){
         LOG_ERROR("Chyba: neplatné parametry pro game_create\n");
         return NULL;
     }
 
+    // Hra v místnosti
     GameInstance *game = (GameInstance*)malloc(sizeof(GameInstance));
     if(!game){
         LOG_ERROR("Chyba: Malloc selhal (game_create)\n");
         return NULL;
     }
 
+    // Nastavení hry před začátkem
     memset(game, 0, sizeof(GameInstance));
-
     game->room_id = room->room_id;
     game->state = GAME_STATE_LOBBY;
     game->current_player_index = 0;
-    game->turn_timeout_seconds = 60;
+    game->turn_timeout_seconds = 60; // Nevyužito
     game->sequence_count = 0;
-
-
-
     game->player_count = 0;
+
+    // Nastavení hráčů pro hru
     for(int i = 0; i < MAX_PLAYERS_PER_ROOM; i++){
         int client_index = room->player_indexes[i];
         if(client_index != -1){
@@ -63,6 +65,7 @@ GameInstance* game_create(struct GameRoom *room){
             player->did_thrown = 0;
             player->took_card = 0;
 
+            // Určení hráče pro výhoz
             if(game->player_count == 0){
                 player->takes_15 = 1;
             }else{
@@ -100,10 +103,12 @@ void game_destroy(GameInstance *game){
 }
 
 int game_start(GameInstance *game){
+    // Kontrola parametru
     if(!game){
         return -1;
     }
 
+    // Kontrola stavu hry
     if(game->state != GAME_STATE_LOBBY){
         LOG_ERROR("Chyba: Hra už běží nebo skončila\n");
         return -1;
@@ -111,11 +116,12 @@ int game_start(GameInstance *game){
 
     LOG_INFO("Spouštím hru v místnosti %d\n", game->room_id);
 
+    // Inicializace herních utilit
     game->state = GAME_STATE_STARTING;
-
     game_init_deck(game);
     game_deal_cards(game);
 
+    // Nastavení výhozového balíčku
     if(game->deck_count > 0){
         game->deck_count--;
         game->discard_deck[0] = game->deck[game->deck_count];
@@ -129,10 +135,10 @@ int game_start(GameInstance *game){
             game->current_player_index = i;
             LOG_INFO("Hru zahajuje hráč: s ID %d\n", player->client_index);
             
-            game->turn_start_time = time(NULL);  // ← PŘIDEJ
-            game->state = GAME_STATE_PLAYING;   // ← PŘIDEJ
+            game->turn_start_time = time(NULL);  // Nastavení herního startu 
+            game->state = GAME_STATE_PLAYING;
             
-            return 0;  // ← OPRAV z "return;"
+            return 0;
 }
     }
 
@@ -144,6 +150,7 @@ int game_start(GameInstance *game){
 }
 
 int game_process_move(GameInstance *game, int client_index, const char* action, const char* message_body){
+    // Kontrola parametrů
     if(!game || !action){
         return -1;
     }
@@ -167,9 +174,7 @@ int game_process_move(GameInstance *game, int client_index, const char* action, 
         return -1;
     }
 
-    // ========================================
-    // TAKP - Lízni z balíčku
-    // ========================================
+    // TAKP - Hráč líže z balíčku
     if(strcmp(action, "TAKP") == 0){
         // Kontrola, zda už nelízal
         if(player->took_card == 1){
@@ -206,16 +211,14 @@ int game_process_move(GameInstance *game, int client_index, const char* action, 
         }
     }
     
-    // ========================================
-    // TAKT - Lízni z vyhozeného balíčku
-    // ========================================
+    // TAKT - Hráč líže vyhozenou kartu
     else if(strcmp(action, "TAKT") == 0){
         // Kontrola, zda už nelízal
         if(player->took_card == 1){
             LOG_INFO("Hráč %d už lízl\n", client_index);
             return -2;
         }
-        // printf("%d\n", game->discard_count);
+
         if(game->discard_count == 0){
             LOG_INFO("V balíčku nejsou žádné karty\n");
             return -3;
@@ -225,7 +228,7 @@ int game_process_move(GameInstance *game, int client_index, const char* action, 
             return -3;
         }
 
-        // Lízni vrchní kartu z discard pile
+        // Lízni vrchní kartu z trashe
         if(game->discard_count > 0){
             game->discard_count--;
             player->hand[player->hand_count++] = game->discard_deck[game->discard_count];
@@ -241,9 +244,7 @@ int game_process_move(GameInstance *game, int client_index, const char* action, 
         }
     }
     
-    // ========================================
-    // UNLO - Vyložit karty (postupku)
-    // ========================================
+    // UNLO - Hráč vykládá karty
     else if (strcmp(action, "UNLO") == 0) {
     if (!message_body) {
         LOG_ERROR("Chybí data karet\n");
@@ -299,10 +300,8 @@ int game_process_move(GameInstance *game, int client_index, const char* action, 
             return -1;
         }
     }
-
-    // ===== VALIDACE KOMBINACÍ =====
     
-    // 1. SET - stejná hodnota, každá barva maximálně jednou
+    // SET - stejná hodnota, každá barva maximálně jednou
     int is_set = 1;
     
     // Kontrola max 4 karty (4 barvy)
@@ -310,9 +309,7 @@ int game_process_move(GameInstance *game, int client_index, const char* action, 
         is_set = 0;
     }
     
-    if (is_set) {
-        // printf("[DEBUG] Zahajuji kontrolu SETu (pocet karet: %d)\n", parsed_count);
-        
+    if (is_set) {        
         // Najdi referenční hodnotu setu (první karta, co není žolík)
         int first_value = -1;
         for (int i = 0; i < parsed_count; i++) {
@@ -324,15 +321,12 @@ int game_process_move(GameInstance *game, int client_index, const char* action, 
 
         // musí existovat alespoň jedna normální karta
         if (first_value == -1) {
-            // printf("[DEBUG] SET neplatny: Nenalezena zadna normalni karta (pouze jokery).\n");
             is_set = 0;
-        } //else printf("[DEBUG] Referencni hodnota SETu: %d\n", first_value);
+        }
 
         // kontrola stejné hodnoty
         for (int i = 0; i < parsed_count && is_set; i++) {
             if (!cards_to_unload[i].is_joker && cards_to_unload[i].value != first_value) {
-                // printf("[DEBUG] SET neplatny: Karta %s ma hodnotu %d (ocekavano %d).\n", 
-                        // cards_to_unload[i].code, cards_to_unload[i].value, first_value);
                 is_set = 0;
             }
         }
@@ -344,7 +338,6 @@ int game_process_move(GameInstance *game, int client_index, const char* action, 
 
             for (int i = 0; i < parsed_count; i++) {
                 if (cards_to_unload[i].is_joker){
-                    // printf("[DEBUG] Karta %d je JOKER - preskakuji kontrolu barvy.\n", i);
                     continue;
                 }
 
@@ -352,8 +345,6 @@ int game_process_move(GameInstance *game, int client_index, const char* action, 
 
                 for (int j = 0; j < suits_count; j++) {
                     if (suits_used[j] == current_suit) {
-                        // printf("[DEBUG] SET neplatny: Duplicitni barva '%c' u karty %s.\n", 
-                                // current_suit, cards_to_unload[i].code);
                         is_set = 0;
                         break;
                     }
@@ -362,10 +353,6 @@ int game_process_move(GameInstance *game, int client_index, const char* action, 
                 if (!is_set) break;
                 
                 suits_used[suits_count++] = current_suit;
-                // printf("[DEBUG] Pridana barva: %c (celkem unikatnich barev: %d)\n", 
-                    // cards_to_unload[i].suit, suits_count);
-                // printf("[DEBUG] Pridana barva: %c (HEX: 0x%02x) u karty %d\n", 
-                    // cards_to_unload[i].suit, (unsigned char)cards_to_unload[i].suit, i);
             }
         }
 
@@ -374,7 +361,7 @@ int game_process_move(GameInstance *game, int client_index, const char* action, 
             is_set = 0;
     }
 
-    // 2. POSTUPKA (sequence) - stejná barva, rostoucí hodnoty
+    // POSTUPKA (sequence) - stejná barva, rostoucí hodnoty
     int is_sequence = 0;
 
     if (!is_set) {
@@ -471,114 +458,9 @@ int game_process_move(GameInstance *game, int client_index, const char* action, 
     }
 
     // return -1;
-    // 3. POSTUPKA různých barev (run) - rostoucí hodnoty, mohou být různé barvy
+    // 3. POSTUPKA různých barev (run) - rostoucí hodnoty, mohou být různé barvy (kod odebran -> fragments/run.txt)
     int is_run = 0;
     
-    // if (!is_set && !is_sequence) {
-    //     // Seřaď podle hodnoty (jokery na konec)
-    //     Card sorted[15];
-    //     int sorted_count = 0;
-        
-    //     // Nejdřív přidej normální karty
-    //     for (int i = 0; i < parsed_count; i++) {
-    //         if (!cards_to_unload[i].is_joker) {
-    //             sorted[sorted_count++] = cards_to_unload[i];
-    //         }
-    //     }
-        
-    //     // Seřaď normální karty podle hodnoty
-    //     for (int i = 0; i < sorted_count - 1; i++) {
-    //         for (int j = i + 1; j < sorted_count; j++) {
-    //             if (sorted[i].value > sorted[j].value) {
-    //                 Card tmp = sorted[i];
-    //                 sorted[i] = sorted[j];
-    //                 sorted[j] = tmp;
-    //             }
-    //         }
-    //     }
-        
-    //     // Přidej jokery na konec
-    //     for (int i = 0; i < parsed_count; i++) {
-    //         if (cards_to_unload[i].is_joker) {
-    //             sorted[sorted_count++] = cards_to_unload[i];
-    //         }
-    //     }
-
-    //     // Ověř posloupnost s jokery
-    //     is_run = 1;
-    //     int expected = sorted[0].value;
-    //     int jokers_used = 0;
-        
-    //     for (int i = 1; i < parsed_count; i++) {
-    //         if (sorted[i].is_joker) {
-    //             expected++;
-    //             jokers_used++;
-    //             continue;
-    //         }
-
-    //         int gap = sorted[i].value - expected;
-    //         if (gap == 1) {
-    //             expected = sorted[i].value;
-    //         } else if (gap > 1 && jokers_used > 0) {
-    //             is_run = 0;
-    //             break;
-    //         } else if (gap != 1) {
-    //             is_run = 0;
-    //             break;
-    //         }
-    //         expected = sorted[i].value;
-    //     }
-
-    //     // Pokud to nefunguje a máme A na začátku, zkus A jako vysoké (14)
-    //     if (!is_run) {
-    //         int has_ace_at_start = 0;
-            
-    //         if (sorted[0].value == 1 && !sorted[0].is_joker) {
-    //             has_ace_at_start = 1;
-    //         }
-            
-    //         if (has_ace_at_start) {
-    //             // Přesuň A za ostatní karty (ale před jokery)
-    //             Card ace = sorted[0];
-    //             int non_joker_count = 0;
-    //             for (int i = 0; i < parsed_count; i++) {
-    //                 if (!sorted[i].is_joker) non_joker_count++;
-    //             }
-                
-    //             for (int i = 0; i < non_joker_count - 1; i++) {
-    //                 sorted[i] = sorted[i + 1];
-    //             }
-    //             sorted[non_joker_count - 1] = ace;
-    //             sorted[non_joker_count - 1].value = 14;
-                
-    //             // Znovu ověř posloupnost
-    //             is_run = 1;
-    //             expected = sorted[0].value;
-    //             jokers_used = 0;
-                
-    //             for (int i = 1; i < parsed_count; i++) {
-    //                 if (sorted[i].is_joker) {
-    //                     expected++;
-    //                     jokers_used++;
-    //                     continue;
-    //                 }
-
-    //                 int gap = sorted[i].value - expected;
-    //                 if (gap == 1) {
-    //                     expected = sorted[i].value;
-    //                 } else if (gap > 1 && jokers_used > 0) {
-    //                     is_run = 0;
-    //                     break;
-    //                 } else if (gap != 1) {
-    //                     is_run = 0;
-    //                     break;
-    //                 }
-    //                 expected = sorted[i].value;
-    //             }
-    //         }
-    //     }
-    // }
-
     // Kontrola platnosti
     if (!is_set && !is_sequence && !is_run) {
         LOG_INFO("Karty netvoří platnou kombinaci (set, postupka nebo run)\n");
@@ -642,10 +524,10 @@ int game_process_move(GameInstance *game, int client_index, const char* action, 
     if (!pipe) return -1;
 
     *pipe = '\0';
-    const char *target_seq_str = message_body; // "AH2H3H"
-    char *new_card_code = pipe + 1;      // "4H"
+    const char *target_seq_str = message_body;
+    char *new_card_code = pipe + 1;
 
-    // 1. Ověření, že hráč má kartu v ruce
+    // Ověření, že hráč má kartu v ruce
     int card_in_hand_idx = -1;
     for (int i = 0; i < player->hand_count; i++) {
         if (strcmp(player->hand[i].code, new_card_code) == 0) {
@@ -659,7 +541,7 @@ int game_process_move(GameInstance *game, int client_index, const char* action, 
         return -1;
     }
 
-    // 2. Najití cílové sekvence v game->sequences
+    // Nalezení cílové sekvence v game->sequences
     CardSequence *target_seq = NULL;
     for (int i = 0; i < game->sequence_count; i++) {
         // Vytvoříme si dočasný string z kódů karet v sekvenci pro porovnání
@@ -677,7 +559,7 @@ int game_process_move(GameInstance *game, int client_index, const char* action, 
     if (!target_seq) return -1; // Sekvence nenalezena
     if (target_seq->count >= MAX_SEQUENCE_CARDS) return -1; // Plno
 
-    // 3. Validace: Pasuje karta do sekvence?
+    // Validace
     Card new_card = player->hand[card_in_hand_idx];
     int can_add = 0;
     int add_at_start = 0; // 1 = přidat na začátek, 0 = na konec
@@ -693,9 +575,6 @@ int game_process_move(GameInstance *game, int client_index, const char* action, 
     }
 
     if (is_set) {
-        // U setu kontroluj:
-        // 1. Stejná hodnota nebo joker
-        // 2. Barva ještě není použita (max 4 karty v setu)
         if (new_card.is_joker || new_card.value == first_val) {
             if (target_seq->count >= 4) {
                 can_add = 0; // Set může mít max 4 karty
@@ -719,12 +598,6 @@ int game_process_move(GameInstance *game, int client_index, const char* action, 
         }
     } else {
         // POSTUPKA - musí být stejná barva a hodnota navazující
-        
-        // Najdi první a poslední ne-joker kartu
-        // Card first_card = target_seq->cards[0];
-        // Card last_card = target_seq->cards[target_seq->count - 1];
-        
-        // Určení barvy postupky (najdi první ne-joker)
         char seq_suit = '\0';
         for (int i = 0; i < target_seq->count; i++) {
             if (!target_seq->cards[i].is_joker) {
@@ -740,7 +613,7 @@ int game_process_move(GameInstance *game, int client_index, const char* action, 
             // Joker lze přidat vždy, ale musíme určit stranu
             can_add = 1;
 
-            // 1. Zjistíme, zda je v postupce vysoké Eso (A jako 14)
+            // Zjistíme, zda je v postupce vysoké Eso (A jako 14)
             int has_high_ace = 0;
             int has_king = 0;
             for (int i = 0; i < target_seq->count; i++) {
@@ -750,7 +623,7 @@ int game_process_move(GameInstance *game, int client_index, const char* action, 
                 }
             }
 
-            // 2. Pokud je tam A i K, považujeme Eso za vysoké (konec postupky)
+            // Pokud je tam A i K, považujeme Eso za vysoké (konec postupky)
             if (has_high_ace && has_king) {
                 // Napravo už není místo (za A=14 nic nejde), přidáme ho doleva
                 LOG_DEBUG("Detekována vysoká postupka končící Esem, přidávám žolíka doleva.\n");
@@ -843,7 +716,7 @@ int game_process_move(GameInstance *game, int client_index, const char* action, 
         return -1;
     }
 
-    // 4. Provedení akce
+    // Provedení akce
     if (add_at_start) {
         // Přidání na začátek - posuň všechny karty doprava
         for (int i = target_seq->count; i > 0; i--) {
@@ -866,12 +739,9 @@ int game_process_move(GameInstance *game, int client_index, const char* action, 
     LOG_INFO("Hráč %d přiložil kartu %s k sekvenci\n", client_index, new_card_code);
     
     return 0;
-}
+    }
 
-    
-    // ========================================
     // THRW - Vyhodit kartu
-    // ========================================
     else if(strcmp(action, "THRW") == 0){
         if(!message_body || strlen(message_body) == 0){
             LOG_ERROR("Chybí kód karty\n");
@@ -905,9 +775,6 @@ int game_process_move(GameInstance *game, int client_index, const char* action, 
             char card_code[4];
             snprintf(card_code, sizeof(card_code), "%s%s", 
                     player->hand[i].name, player->hand[i].suit);
-            
-            // printf("Porovnávám: '%s' vs '%s'\n", message_body, card_code);
-            
             if(strcmp(message_body, card_code) == 0){
                 card_index = i;
                 break;
@@ -948,9 +815,7 @@ int game_process_move(GameInstance *game, int client_index, const char* action, 
         return 0;
     }
     
-    // ========================================
     // CLOS - Zavřít poslední kartou
-    // ========================================
     else if(strcmp(action, "CLOS") == 0){
         if(!message_body || strlen(message_body) == 0){
             LOG_ERROR("Chybí kód karty\n");
@@ -1068,7 +933,7 @@ int game_get_player_cards(GameInstance *game, int client_index, char* buffer, si
     char *current_pos = buffer;
     size_t remaining_size = buffer_size;
     int written = 0;
-
+    // Naformátuj karty do požadovaného formátu
     for(int i = 0; i < player->hand_count; i++){
         if (i > 0) {
             written = snprintf(current_pos, remaining_size, "|");
@@ -1124,7 +989,6 @@ int game_get_full_state(GameInstance *game, int client_index, char *buffer, size
     PlayerGameState *player = NULL;
     int enemy_card_count = 0;
 
-    // POZOR: Kontroluj game->player_count místo MAX, nebo ověřuj index
     for(int i = 0; i < game->player_count; i++){
         if(game->players[i].client_index == client_index){
             player = &game->players[i];
@@ -1141,33 +1005,33 @@ int game_get_full_state(GameInstance *game, int client_index, char *buffer, size
     size_t rem = buffer_size;
     int written;
 
-    // 1. Ruka
+    // Ruka
     for(int i = 0; i < player->hand_count; i++){
         written = snprintf(ptr, rem, "%s", player->hand[i].code);
         if(written < 0 || (size_t)written >= rem) return -2;
         ptr += written; rem -= written;
     }
 
-    // ODDĚLOVAČ 1
+    // Delim 1
     written = snprintf(ptr, rem, "|");
     if(written < 0 || (size_t)written >= rem) return -2;
     ptr += written; rem -= written; // Tady jsi v původním kódu aktualizaci měl
 
-    // 2. Discard
+    // Discard pile
     if(game->discard_count > 0){
         written = snprintf(ptr, rem, "%s", game->discard_deck[game->discard_count-1].code);
     } else {
-        written = 0; // Nic se nepíše
+        written = 0; 
     }
     if(written < 0 || (size_t)written >= rem) return -2;
     ptr += written; rem -= written;
 
-    // ODDĚLOVAČ 2 - TADY CHYBĚLY ptr A rem AKTUALIZACE!
+    // Delim 2
     written = snprintf(ptr, rem, "|");
     if(written < 0 || (size_t)written >= rem) return -2;
-    ptr += written; rem -= written; // PŘIDÁNO
+    ptr += written; rem -= written;
 
-    // 3. Postupky
+    // Postupky
     for(int i = 0; i < game->sequence_count; i++){
         if(i > 0){
             written = snprintf(ptr, rem, ",");
@@ -1181,7 +1045,7 @@ int game_get_full_state(GameInstance *game, int client_index, char *buffer, size
         }
     }
 
-    // ODDĚLOVAČ 3
+    // Delim 3
     written = snprintf(ptr, rem, "|");
     if(written < 0 || (size_t)written >= rem) return -2;
     ptr += written; rem -= written;
@@ -1195,14 +1059,14 @@ int game_get_full_state(GameInstance *game, int client_index, char *buffer, size
     }
 
     if(written < 0 || (size_t)written >= rem) return -2;
-    ptr += written; rem -= written; // Aktualizace musí být pro obě větve
+    ptr += written; rem -= written;
 
-    // ODDĚLOVAČ 4
+    // Delim 4
     written = snprintf(ptr, rem, "|");
     if(written < 0 || (size_t)written >= rem) return -2;
     ptr += written; rem -= written;
 
-    // 4. Enemy count
+    // Enemy card count
     written = snprintf(ptr, rem, "%d", enemy_card_count);
     if(written < 0 || (size_t)written >= rem) return -2;
     ptr += written; rem -= written;
@@ -1211,14 +1075,17 @@ int game_get_full_state(GameInstance *game, int client_index, char *buffer, size
 }
 
 int game_validate_move(GameInstance *game, int client_index, const char* action){
+    // Už to dělá process_move
     return 0;
 }
 
 int game_check_timeout(GameInstance *game){
+    // Pro budoucí implementaci
     return 0;
 }
 
 int game_disconnect_handle(GameInstance *game, int client_index){
+    // Pro budoucí implementaci
     return 0;
 }
 
@@ -1243,14 +1110,17 @@ int game_reconnect_handle(GameInstance *game, int client_index){
 }
 
 void game_init_deck(GameInstance *game){
+    // Kontrola parametru
     if(!game){
         return;
     }
 
+    // Definice karet
     const char *suits[] = {"H", "D", "C", "S", "Y"};
     const char *names[] = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "X", "J", "Q", "K", "Y"};
     int values[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 50};
 
+    // Vytvoření 52 * 2 karet
     game->deck_count = 0;
     for(int i = 0; i < 2; i++){
         for(int j = 0; j < 4; j++){
@@ -1271,6 +1141,7 @@ void game_init_deck(GameInstance *game){
         }
     }
 
+    // Přidání 4 jokerů
     for(int i = 0; i < 4; i++){
         Card *card = &game->deck[game->deck_count];
         card->id = game->deck_count;
@@ -1286,6 +1157,7 @@ void game_init_deck(GameInstance *game){
         strcpy(card->code, tmp);
     }
 
+    // Zamíchání balíčku
     // for(int i = game->deck_count-1; i >0; i--){
     //     int j = rand() % (i+1);
     //     Card temp = game->deck[i];
@@ -1302,6 +1174,7 @@ void game_deal_cards(GameInstance *game){
         return;
     }
 
+    // Rozdání karet podle toho, kdo začíná (15/14)
     for(int i = 0; i < game->player_count; i++){
         PlayerGameState *player = &game->players[i];
         int cards_per_player = player->takes_15 ? 15 : 14;
@@ -1342,35 +1215,35 @@ void game_calculate_scores(GameInstance *game) {
     int values[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 50};
     int num_variants = sizeof(names) / sizeof(names[0]);
 
-    printf("\n[SCORE_CALC] Zahajuji vypocet skore pro hru.\n");
+    // printf("\n[SCORE_CALC] Zahajuji vypocet skore pro hru.\n");
 
     pthread_mutex_lock(&clients_mutex);
     for (int i = 0; i < game->player_count; i++) {
-        int previous_score = game->players[i].score;
+        // int previous_score = game->players[i].score;
         game->players[i].score = 0; 
         
-        printf("  [PLAYER %d] Karty v ruce (%d): ", i, game->players[i].hand_count);
+        // printf("  [PLAYER %d] Karty v ruce (%d): ", i, game->players[i].hand_count);
 
         for (int j = 0; j < game->players[i].hand_count; j++) {
             int found = 0;
             for (int k = 0; k < num_variants; k++) {
                 if (strcmp(game->players[i].hand[j].name, names[k]) == 0) {
                     game->players[i].score += values[k];
-                    printf("%s(+%d) ", game->players[i].hand[j].name, values[k]);
+                    // printf("%s(+%d) ", game->players[i].hand[j].name, values[k]);
                     found = 1;
                     break;
                 }
             }
             if (!found) {
-                printf(" ERR(%s) ", game->players[i].hand[j].name);
+                // printf(" ERR(%s) ", game->players[i].hand[j].name);
             }
         }
-        printf("\n  [PLAYER %d] Vysledne skore: %d (predchozi bylo: %d)\n", 
-               i, game->players[i].score, previous_score);
+        // printf("\n  [PLAYER %d] Vysledne skore: %d (predchozi bylo: %d)\n", 
+            //    i, game->players[i].score, previous_score);
     }
     pthread_mutex_unlock(&clients_mutex);
     
-    printf("[SCORE_CALC] Vypocet dokoncen.\n\n");
+    // printf("[SCORE_CALC] Vypocet dokoncen.\n\n");
 }
 
 int game_is_finished(GameInstance *game){

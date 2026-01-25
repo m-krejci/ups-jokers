@@ -72,7 +72,7 @@ void *client_handler(void* arg);
 int find_player_by_nick(const char* nick);
 
 /**
- * @brief 
+ * @brief Kontroluje délku nejdelšího odpojení pro smazání klienta z paměti a maximální rozsah pro heartbeat 
  */
 void check_client_timeouts();
 

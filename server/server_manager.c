@@ -181,7 +181,7 @@ void start_server(int argc, char **argv){
         printf("Čekám na klienta...\n");
         // Čekání na klienta
         new_socket = accept(server_fd, (struct sockaddr *)&address, (socklen_t *)&addrlen);
-        DLOG("ACCEPT fd=%d", new_socket);
+        // DLOG("ACCEPT fd=%d", new_socket);
         if(new_socket < 0){
             printf("ERROR: Accept (%d)\n", new_socket);
             continue; // Jdi čekat na dalšího klienta

@@ -1,0 +1,106 @@
+    Část kódu, která lze aplikovat pro vykládání karet různých barev, ale po sobě jdoucích hodnot (zjednodušení hry)
+    
+    // if (!is_set && !is_sequence) {
+    //     // Seřaď podle hodnoty (jokery na konec)
+    //     Card sorted[15];
+    //     int sorted_count = 0;
+        
+    //     // Nejdřív přidej normální karty
+    //     for (int i = 0; i < parsed_count; i++) {
+    //         if (!cards_to_unload[i].is_joker) {
+    //             sorted[sorted_count++] = cards_to_unload[i];
+    //         }
+    //     }
+        
+    //     // Seřaď normální karty podle hodnoty
+    //     for (int i = 0; i < sorted_count - 1; i++) {
+    //         for (int j = i + 1; j < sorted_count; j++) {
+    //             if (sorted[i].value > sorted[j].value) {
+    //                 Card tmp = sorted[i];
+    //                 sorted[i] = sorted[j];
+    //                 sorted[j] = tmp;
+    //             }
+    //         }
+    //     }
+        
+    //     // Přidej jokery na konec
+    //     for (int i = 0; i < parsed_count; i++) {
+    //         if (cards_to_unload[i].is_joker) {
+    //             sorted[sorted_count++] = cards_to_unload[i];
+    //         }
+    //     }
+
+    //     // Ověř posloupnost s jokery
+    //     is_run = 1;
+    //     int expected = sorted[0].value;
+    //     int jokers_used = 0;
+        
+    //     for (int i = 1; i < parsed_count; i++) {
+    //         if (sorted[i].is_joker) {
+    //             expected++;
+    //             jokers_used++;
+    //             continue;
+    //         }
+
+    //         int gap = sorted[i].value - expected;
+    //         if (gap == 1) {
+    //             expected = sorted[i].value;
+    //         } else if (gap > 1 && jokers_used > 0) {
+    //             is_run = 0;
+    //             break;
+    //         } else if (gap != 1) {
+    //             is_run = 0;
+    //             break;
+    //         }
+    //         expected = sorted[i].value;
+    //     }
+
+    //     // Pokud to nefunguje a máme A na začátku, zkus A jako vysoké (14)
+    //     if (!is_run) {
+    //         int has_ace_at_start = 0;
+            
+    //         if (sorted[0].value == 1 && !sorted[0].is_joker) {
+    //             has_ace_at_start = 1;
+    //         }
+            
+    //         if (has_ace_at_start) {
+    //             // Přesuň A za ostatní karty (ale před jokery)
+    //             Card ace = sorted[0];
+    //             int non_joker_count = 0;
+    //             for (int i = 0; i < parsed_count; i++) {
+    //                 if (!sorted[i].is_joker) non_joker_count++;
+    //             }
+                
+    //             for (int i = 0; i < non_joker_count - 1; i++) {
+    //                 sorted[i] = sorted[i + 1];
+    //             }
+    //             sorted[non_joker_count - 1] = ace;
+    //             sorted[non_joker_count - 1].value = 14;
+                
+    //             // Znovu ověř posloupnost
+    //             is_run = 1;
+    //             expected = sorted[0].value;
+    //             jokers_used = 0;
+                
+    //             for (int i = 1; i < parsed_count; i++) {
+    //                 if (sorted[i].is_joker) {
+    //                     expected++;
+    //                     jokers_used++;
+    //                     continue;
+    //                 }
+
+    //                 int gap = sorted[i].value - expected;
+    //                 if (gap == 1) {
+    //                     expected = sorted[i].value;
+    //                 } else if (gap > 1 && jokers_used > 0) {
+    //                     is_run = 0;
+    //                     break;
+    //                 } else if (gap != 1) {
+    //                     is_run = 0;
+    //                     break;
+    //                 }
+    //                 expected = sorted[i].value;
+    //             }
+    //         }
+    //     }
+    // }
